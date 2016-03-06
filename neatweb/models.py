@@ -24,3 +24,6 @@ class Species(models.Model):
 class Organism(models.Model):
     fitness = models.DecimalField(max_digits=20, decimal_places=16)
     rank = models.IntegerField()
+    species = models.ForeignKey(Species, on_delete=models.CASCADE)
+    population = models.ForeignKey(Population, on_delete=models.CASCADE)
+    generation = models.ForeignKey(Generation, on_delete=models.CASCADE)
