@@ -7,7 +7,15 @@ Welcome to the pyNEAT!<br>
 {% for e in exp_list %}
   <option value="{{ e.id }}">Experiment {{ e.id }}</option>   
 {% endfor %}
-</select><br>
+</select>
+
+{% with sel=exp_list|first %}
+<form id="exp_form" action="/neat/experiment-{{ sel.id }}">
+  <input type="submit" value="Select">
+</form>
+{% endwith %}
+
+<br>
 
 Name:<br> 
 <input type="text" id="name" value="{{ name }}"><br>
@@ -45,9 +53,5 @@ Data:<br>
 <textarea id="data" rows="8" cols="32">{{ conf.data }}</textarea><br>
 Fitness Function:<br>
 <textarea id="fitness" rows="8" cols="75">{{ conf.fitness_func }}</textarea><br>
-
-<div id="test">
-
-</div>
 
 {% endblock %}

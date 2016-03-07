@@ -9,6 +9,8 @@ $(document).ready(function() {
 
       conf = jQuery.parseJSON(data);
 
+      $('#exp_form').attr('action', '/neat/experiment-'.concat(expId))
+
       $('#name').val(conf.name);
       $('#runs').val(conf.runs);
       $('#pop_size').val(conf.pop_size);

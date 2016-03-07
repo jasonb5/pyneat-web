@@ -20,6 +20,15 @@ def experiment(request):
 
     return HttpResponse(json.dumps(conf))
 
+def populations(request, exp_id):
+    pop_list = models.Population.objects.filter(experiment_id=exp_id)
+
+    context = {
+            'pop_list': pop_list,
+    }
+
+    return render(request, 'neatweb/populations.html', context)
+
 def experiments(request):
     exp_list = models.Experiment.objects.all()
 

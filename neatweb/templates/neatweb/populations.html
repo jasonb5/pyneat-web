@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<select id="populations">
+{% for p in pop_list %}
+  <option value="{{ p.id }}">Population {{ p.id }}</option>
+{% endfor %}
+</select><br>
+
+{% endblock %}
