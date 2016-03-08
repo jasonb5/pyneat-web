@@ -1,9 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<select id="organisms">
-{% for o in org_list %}
-  <option id="{{ o.id }}">Organism {{ o.id }}</option>
-{% endfor %}
-</select>
+<div>
+  <select id="organisms">
+  {% for o in org_list %}
+    <option id="{{ o.id }}">Organism {{ o.id }}</option>
+  {% endfor %}
+  </select>
+</div><br>
+{% with org_sel=org_list|first %}
+Fitness: 
+<div id="fitness">
+{{ org_sel.fitness }}
+</div><br>
+Rank: 
+<div id="rank">
+{{ org_sel.rank }}<br>
+</div>
+{% endwith %}
 {% endblock %}

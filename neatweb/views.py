@@ -4,6 +4,27 @@ from django.shortcuts import render
 from . import models
 
 import json
+import decimal
+
+def decimal_serializer(o):
+    if isinstance(o, decimal.Decimal):
+        return str(o)
+
+def organism(request):
+    org_id = None
+
+    if request.method == 'GET':
+        org_id = request.GET['organism_id']
+
+    context = { }
+
+    if org_id:
+        organism = models.Organism.objects.get(pk=org_id)
+
+        context['fitness'] = organism.fitness
+        context['rank'] = organism.rank
+    
+    return HttpResponse(json.dumps(context, default=decimal_serializer))
 
 def generation(request):
     return HttpResponse("")

@@ -1,8 +1,17 @@
 $(document).ready(function() {
-  $('#generations').change(function() {
-    var genId;
+  $('#organisms').change(function() {
+    var orgId = $(this).children(':selected').attr('id');
 
-    genId = $(this).children(":selected").attr("id");
+    $.get('/neat/organism/', {organism_id: orgId}, function(data) {
+      var org = jQuery.parseJSON(data);
+
+      $('#fitness').html(org.fitness);
+      $('#rank').html(org.rank);
+    });
+  });
+
+  $('#generations').change(function() {
+    var genId = $(this).children(':selected').attr('id');
 
     $.get('/neat/generation/', {generation_id: genId}, function(data) {
       var updateAction = $('#gen_form').attr('action');
