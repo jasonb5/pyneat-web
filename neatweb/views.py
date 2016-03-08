@@ -37,6 +37,10 @@ def species_query(request):
     if spec_id:
         species = models.Species.objects.get(pk=spec_id)
 
+        org_count = models.Organism.objects.filter(
+                species_id=species.id).count()
+
+        context['org_count'] = org_count
         context['avg_fitness'] = species.avg_fitness
         context['max_fitness'] = species.max_fitness
         context['offspring'] = species.offspring
@@ -96,7 +100,13 @@ def species(request, exp_id, pop_id, gen_id):
             population_id=pop_id,
             generation_id=gen_id)
 
+    org_count = models.Organism.objects.filter(
+            population_id=pop_id,
+            generation_id=gen_id,
+            species_id=spec_list[0].id).count()
+
     context = {
+            'org_count': org_count,
             'exp_id': exp_id,
             'spec_list': spec_list,
     }

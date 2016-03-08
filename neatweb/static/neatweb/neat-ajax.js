@@ -16,6 +16,7 @@ $(document).ready(function() {
     $.get('/neat/species/', {species_id: specId}, function(data) {
       var spec = jQuery.parseJSON(data);
 
+      $('#organisms').html(spec.org_count)
       $('#avg_fitness').html(spec.avg_fitness)
       $('#max_fitness').html(spec.max_fitness)
       $('#offspring').html(spec.offspring)
