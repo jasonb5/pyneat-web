@@ -27,10 +27,17 @@ $(document).ready(function() {
     var genId = $(this).children(':selected').attr('id');
 
     $.get('/neat/generation/', {generation_id: genId}, function(data) {
+      var gen = jQuery.parseJSON(data);
       var updateAction = $('#gen_form').attr('action');
       var oldId = /.*\/(generation-\d+)$/.exec(updateAction)[1];
 
       $('#gen_form').attr('action', updateAction.replace(oldId, 'generation-'.concat(genId)));
+
+      if (gen.winner) {
+        $('#status').html('A winner was found!');
+      } else {
+        $('#status').html('A winner was not found!');
+      }
     });
   });
 

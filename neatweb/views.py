@@ -45,7 +45,23 @@ def species_query(request):
     return HttpResponse(json.dumps(context, default=decimal_serializer))
 
 def generation_query(request):
-    return HttpResponse("")
+    gen_id = None 
+
+    if request.method == 'GET':
+        gen_id = request.GET['generation_id']
+
+    context = {}
+
+    if gen_id:
+        generation = models.Generation.objects.get(pk=gen_id)
+
+        winner = models.Organism.objects.filter(
+                generation_id=generation.id,
+                winner = True)
+
+        context['winner'] = True if winner else False
+
+    return HttpResponse(json.dumps(context, default=decimal_serializer))
 
 def experiment_query(request):
     exp_id = None
@@ -90,9 +106,15 @@ def species(request, exp_id, pop_id, gen_id):
 def generations(request, exp_id, pop_id):
     gen_list = models.Generation.objects.filter(population_id=pop_id)
 
+    winner = models.Organism.objects.filter(
+            population_id=pop_id,
+            generation_id=gen_list[0].id,
+            winner=True)
+
     context = {
             'exp_id': exp_id,
             'gen_list': gen_list,
+            'winner': winner,
     }
 
     return render(request, 'neatweb/generations.html', context)
@@ -100,8 +122,13 @@ def generations(request, exp_id, pop_id):
 def populations(request, exp_id):
     pop_list = models.Population.objects.filter(experiment_id=exp_id)
 
+    winner = models.Organism.objects.filter(
+            population_id=pop_list[0].id,
+            winner=True)
+
     context = {
             'pop_list': pop_list,
+            'winner': winner,
     }
 
     return render(request, 'neatweb/populations.html', context)
