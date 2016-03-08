@@ -20,10 +20,23 @@ def experiment(request):
 
     return HttpResponse(json.dumps(conf))
 
+def species(request, exp_id, pop_id, gen_id):
+    spec_list = models.Species.objects.filter(
+            population_id=pop_id,
+            generation_id=gen_id)
+
+    context = {
+            'exp_id': exp_id,
+            'spec_list': spec_list,
+    }
+
+    return render(request, 'neatweb/species.html', context)
+
 def generations(request, exp_id, pop_id):
     gen_list = models.Generation.objects.filter(population_id=pop_id)
 
     context = {
+            'exp_id': exp_id,
             'gen_list': gen_list,
     }
 

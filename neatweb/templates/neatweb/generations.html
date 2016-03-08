@@ -6,4 +6,11 @@
   <option id="{{ g.id }}">Generation {{ g.id }}</option>
 {% endfor %}
 </select>
+
+{% with sel_gen=gen_list|first %}
+<form id="gen_sel_form" 
+      action="/neat/experiment-{{ exp_id }}/population-{{ sel_gen.population_id }}/generation-{{ sel_gen.id }}" >
+  <input type="submit" value="Select">
+</form>
+{% endwith %}
 {% endblock %}

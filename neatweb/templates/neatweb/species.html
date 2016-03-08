@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<select>
+{% for s in spec_list %}
+  <option id="{{ s.id }}">Species {{ s.id }}</option>
+{% endfor %}
+</select>
+{% endblock %}
