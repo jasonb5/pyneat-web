@@ -6,4 +6,11 @@
   <option id="{{ s.id }}">Species {{ s.id }}</option>
 {% endfor %}
 </select>
+
+{% with sel_spec=spec_list|first %}
+<form id="spec_form"
+      action="/neat/experiment-{{ exp_id }}/population-{{ sel_spec.population_id }}/generation-{{ sel_spec.generation_id}}/species-{{ sel_spec.id }}">
+  <input type="submit" value="Select">
+</form>
+{% endwith %}
 {% endblock %}
