@@ -23,6 +23,7 @@ def organism_query(request):
 
         context['fitness'] = organism.fitness
         context['rank'] = organism.rank
+        context['network'] = organism.network
     
     return HttpResponse(json.dumps(context, default=decimal_serializer))
 
@@ -91,6 +92,7 @@ def organisms(request, exp_id, pop_id, gen_id, spec_id):
     context = {
             'exp_id': exp_id,
             'org_list': org_list,
+            'network': json.loads(org_list[0].network),
     }
 
     return render(request, 'neatweb/organisms.html', context)

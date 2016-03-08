@@ -16,6 +16,38 @@ Fitness:
 Rank: 
 <div id="rank">
 {{ org_sel.rank }}<br>
-</div>
+</div><br>
 {% endwith %}
+
+Input:
+<div id="input">
+  {{ network.input }}
+</div><br>
+Hidden:
+<div id="hidden">
+  {{ network.hidden }}
+</div><br>
+Output:
+<div id="output">
+  {{ network.output }}
+</div><br>
+Genes:
+<div id="genes">
+  <table border="1">
+    <tr>
+      <td>Inode</td>
+      <td>Onode</td>
+      <td>Weight</td>
+      <td>Enabled</td>
+    </tr>
+  {% for g in network.genes %}
+    <tr>
+      <td>{{ g.inode }}</td>
+      <td>{{ g.onode }}</td>
+      <td>{{ g.weight }}</td>
+      <td>{{ g.enabled }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+</div>
 {% endblock %}
