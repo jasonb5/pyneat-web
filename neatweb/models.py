@@ -7,13 +7,15 @@ class Experiment(models.Model):
     config = models.TextField()
 
 class Population(models.Model):
+    rel_index = models.IntegerField()
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
 class Generation(models.Model):
-    relative_index = models.IntegerField()
+    rel_index = models.IntegerField()
     population = models.ForeignKey(Population, on_delete=models.CASCADE)
 
 class Species(models.Model):
+    rel_index = models.IntegerField()
     avg_fitness = models.DecimalField(max_digits=20, decimal_places=16)
     max_fitness = models.DecimalField(max_digits=20, decimal_places=16)
     offspring = models.IntegerField()
@@ -22,6 +24,8 @@ class Species(models.Model):
     generation = models.ForeignKey(Generation, on_delete=models.CASCADE)
 
 class Organism(models.Model):
+    rel_index = models.IntegerField()
+    winner = models.BooleanField()
     fitness = models.DecimalField(max_digits=20, decimal_places=16)
     rank = models.IntegerField()
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
