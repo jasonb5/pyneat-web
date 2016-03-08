@@ -20,6 +20,15 @@ def experiment(request):
 
     return HttpResponse(json.dumps(conf))
 
+def generations(request, exp_id, pop_id):
+    gen_list = models.Generation.objects.filter(population_id=pop_id)
+
+    context = {
+            'gen_list': gen_list,
+    }
+
+    return render(request, 'neatweb/generations.html', context)
+
 def populations(request, exp_id):
     pop_list = models.Population.objects.filter(experiment_id=exp_id)
 

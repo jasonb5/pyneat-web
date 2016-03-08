@@ -7,4 +7,11 @@
 {% endfor %}
 </select><br>
 
+{% with sel_pop=pop_list|first %}
+<form id="pop_sel_form" 
+    action="/neat/experiment-{{ sel_pop.experiment_id }}/population-{{ sel_pop.id }}">
+  <input type="submit" value="Select">
+</form>
+{% endwith %}
+
 {% endblock %}
