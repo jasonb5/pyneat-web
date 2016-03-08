@@ -1,8 +1,21 @@
 $(document).ready(function() {
+  $('#generations').change(function() {
+    var genId;
+
+    genId = $(this).children(":selected").attr("id");
+
+    $.get('/neat/generation/', {generation_id: genId}, function(data) {
+      var updateAction = $('#gen_form').attr('action');
+      var oldId = /.*\/(generation-\d+)$/.exec(updateAction)[1];
+
+      $('#gen_form').attr('action', updateAction.replace(oldId, 'generation-'.concat(genId)));
+    });
+  });
+
   $('#experiments').change(function() {
     var expId;
 
-    expId = $(this).val()
+    expId = $(this).children(':selected').attr('id');
 
     $.get('/neat/experiment/', {experiment_id: expId}, function(data) {
       var conf;

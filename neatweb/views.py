@@ -5,6 +5,9 @@ from . import models
 
 import json
 
+def generation(request):
+    return HttpResponse("")
+
 def experiment(request):
     exp_id = None
 
