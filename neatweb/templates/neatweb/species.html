@@ -8,9 +8,30 @@
 </select>
 
 {% with sel_spec=spec_list|first %}
+<div>
 <form id="spec_form"
       action="/neat/experiment-{{ exp_id }}/population-{{ sel_spec.population_id }}/generation-{{ sel_spec.generation_id}}/species-{{ sel_spec.id }}">
   <input type="submit" value="Select">
 </form>
+<div><br>
+Organisms:
+<div id="organisms">
+</div><br>
+Average Fitness:
+<div id="avg_fitness">
+  {{ sel_spec.avg_fitness }}
+</div><br>
+Max Fitness:
+<div id="max_fitness">
+  {{ sel_spec.max_fitness }}
+</div><br>
+Offspring:
+<div id="offspring">
+  {{ sel_spec.offspring }}
+</div><br>
+Age Since Improvement:
+<div id="age_since_imp">
+  {{ sel_spec.age_since_imp }}
+</div><br>
 {% endwith %}
 {% endblock %}
