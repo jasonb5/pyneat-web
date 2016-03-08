@@ -28,7 +28,7 @@ class Organism(models.Model):
     rel_index = models.IntegerField()
     winner = models.BooleanField()
     marked = models.BooleanField()
-    network = models.CharField(max_length=256)
+    network = models.TextField()
     fitness = models.DecimalField(max_digits=20, decimal_places=16)
     rank = models.IntegerField()
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
