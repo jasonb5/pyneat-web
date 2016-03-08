@@ -4,7 +4,7 @@
 <div>
   <select id="generations">
   {% for g in gen_list %}
-    <option id="{{ g.id }}">Generation {{ g.id }}</option>
+    <option value="{{ g.id }}">Generation {{ g.id }}</option>
   {% endfor %}
   </select>
 

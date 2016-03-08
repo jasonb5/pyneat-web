@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $('#organisms').change(function() {
-    var orgId = $(this).children(':selected').attr('id');
+    var orgId = $(this).val();
 
     $.get('/neat/organism/', {organism_id: orgId}, function(data) {
       var org = jQuery.parseJSON(data);
@@ -11,7 +11,7 @@ $(document).ready(function() {
   });
 
   $('#species').change(function() {
-    var specId = $(this).children(':selected').attr('id');
+    var specId = $(this).val();
 
     $.get('/neat/species/', {species_id: specId}, function(data) {
       var spec = jQuery.parseJSON(data);
@@ -29,7 +29,7 @@ $(document).ready(function() {
   });
 
   $('#generations').change(function() {
-    var genId = $(this).children(':selected').attr('id');
+    var genId = $(this).val();
 
     $.get('/neat/generation/', {generation_id: genId}, function(data) {
       var gen = jQuery.parseJSON(data);
