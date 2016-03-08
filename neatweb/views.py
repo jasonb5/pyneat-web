@@ -10,13 +10,13 @@ def decimal_serializer(o):
     if isinstance(o, decimal.Decimal):
         return str(o)
 
-def organism(request):
+def organism_query(request):
     org_id = None
 
     if request.method == 'GET':
         org_id = request.GET['organism_id']
 
-    context = { }
+    context = {}
 
     if org_id:
         organism = models.Organism.objects.get(pk=org_id)
@@ -26,10 +26,28 @@ def organism(request):
     
     return HttpResponse(json.dumps(context, default=decimal_serializer))
 
-def generation(request):
+def species_query(request):
+    spec_id = None
+
+    if request.method == 'GET':
+        spec_id = request.GET['species_id']
+
+    context = {}
+
+    if spec_id:
+        species = models.Species.objects.get(pk=spec_id)
+
+        context['avg_fitness'] = species.avg_fitness
+        context['max_fitness'] = species.max_fitness
+        context['offspring'] = species.offspring
+        context['age_since_imp'] = species.age_since_imp
+
+    return HttpResponse(json.dumps(context, default=decimal_serializer))
+
+def generation_query(request):
     return HttpResponse("")
 
-def experiment(request):
+def experiment_query(request):
     exp_id = None
 
     if request.method == 'GET':

@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<select>
-{% for s in spec_list %}
-  <option id="{{ s.id }}">Species {{ s.id }}</option>
-{% endfor %}
-</select>
+<div>
+  <select id="species">
+  {% for s in spec_list %}
+    <option id="{{ s.id }}">Species {{ s.id }}</option>
+  {% endfor %}
+  </select>
+</div><br>
 
 {% with sel_spec=spec_list|first %}
 <div>

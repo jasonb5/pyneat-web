@@ -10,6 +10,19 @@ $(document).ready(function() {
     });
   });
 
+  $('#species').change(function() {
+    var specId = $(this).children(':selected').attr('id');
+
+    $.get('/neat/species/', {species_id: specId}, function(data) {
+      var spec = jQuery.parseJSON(data);
+
+      $('#avg_fitness').html(spec.avg_fitness)
+      $('#max_fitness').html(spec.max_fitness)
+      $('#offspring').html(spec.offspring)
+      $('#age_since_imp').html(spec.age_since_imp)
+    });
+  });
+
   $('#generations').change(function() {
     var genId = $(this).children(':selected').attr('id');
 
