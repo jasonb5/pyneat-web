@@ -8,25 +8,30 @@ $(document).ready(function() {
       $('#fitness').html(org.fitness);
       $('#rank').html(org.rank);
 
-      var network = jQuery.parseJSON(org.network);
-      var table = '<table border="1"><tr><td>Inode</td><td>Onode</td><td>Weight</td><td>Enabled</td></td>';
+      try {
+        var network = jQuery.parseJSON(org.network);
+        var table = '<table border="1"><tr><td>Inode</td><td>Onode</td><td>Weight</td><td>Enabled</td></td>';
 
-      $('#input').html(network.input);
-      $('#hidden').html(network.hidden);
-      $('#output').html(network.output);
+        $('#input').html(network.input);
+        $('#hidden').html(network.hidden);
+        $('#output').html(network.output);
 
-      $.each(network.genes, function() {
-        table += '<tr>';
-        table += '<td>' + this['inode'] + '</td>';
-        table += '<td>' + this['onode'] + '</td>';
-        table += '<td>' + this['weight'] + '</td>';
-        table += '<td>' + this['enabled'] + '</td>';
-        table += '</tr>';
-      });
+        $.each(network.genes, function() {
+          table += '<tr>';
+          table += '<td>' + this['inode'] + '</td>';
+          table += '<td>' + this['onode'] + '</td>';
+          table += '<td>' + this['weight'] + '</td>';
+          table += '<td>' + this['enabled'] + '</td>';
+          table += '</tr>';
+        });
 
-      table += '</table>';
+        table += '</table>';
 
-      $('#genes').html(table);
+        $('#genes').html(table);
+      }
+      catch (err) {
+        $('#genes').html(err.message);
+      }
     });
   });
 
