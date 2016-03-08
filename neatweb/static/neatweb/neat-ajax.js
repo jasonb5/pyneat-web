@@ -15,6 +15,10 @@ $(document).ready(function() {
 
     $.get('/neat/species/', {species_id: specId}, function(data) {
       var spec = jQuery.parseJSON(data);
+      var updateAction = $('#spec_form').attr('action');
+      var oldId = /.*\/(species-\d+)$/.exec(updateAction)[1];
+
+      $('#spec_form').attr('action', updateAction.replace(oldId, 'species-'.concat(specId)));
 
       $('#organisms').html(spec.org_count)
       $('#avg_fitness').html(spec.avg_fitness)
@@ -43,9 +47,7 @@ $(document).ready(function() {
   });
 
   $('#experiments').change(function() {
-    var expId;
-
-    expId = $(this).children(':selected').attr('id');
+    var expId = $(this).val();
 
     $.get('/neat/experiment/', {experiment_id: expId}, function(data) {
       var conf;
