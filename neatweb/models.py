@@ -16,6 +16,7 @@ class Generation(models.Model):
 
 class Species(models.Model):
     rel_index = models.IntegerField()
+    marked = models.BooleanField()
     avg_fitness = models.DecimalField(max_digits=20, decimal_places=16)
     max_fitness = models.DecimalField(max_digits=20, decimal_places=16)
     offspring = models.IntegerField()
@@ -26,6 +27,7 @@ class Species(models.Model):
 class Organism(models.Model):
     rel_index = models.IntegerField()
     winner = models.BooleanField()
+    marked = models.BooleanField()
     fitness = models.DecimalField(max_digits=20, decimal_places=16)
     rank = models.IntegerField()
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
