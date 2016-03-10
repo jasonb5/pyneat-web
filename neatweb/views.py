@@ -22,6 +22,7 @@ def organism_query(request):
         organism = models.Organism.objects.get(pk=org_id)
 
         context['fitness'] = organism.fitness
+        context['marked'] = organism.marked
         context['rank'] = organism.rank
         context['network'] = organism.network
     
@@ -42,6 +43,7 @@ def species_query(request):
                 species_id=species.id).count()
 
         context['org_count'] = org_count
+        context['marked'] = species.marked
         context['avg_fitness'] = species.avg_fitness
         context['max_fitness'] = species.max_fitness
         context['offspring'] = species.offspring
