@@ -7,6 +7,7 @@ $(document).ready(function() {
 
       $('#fitness').html(org.fitness);
       $('#rank').html(org.rank);
+      $('#marked').html(org.marked.toString());
 
       try {
         var network = jQuery.parseJSON(org.network);
@@ -46,6 +47,7 @@ $(document).ready(function() {
       $('#spec_form').attr('action', updateAction.replace(oldId, 'species-'.concat(specId)));
 
       $('#organisms').html(spec.org_count)
+      $('#marked').html(spec.marked.toString())
       $('#avg_fitness').html(spec.avg_fitness)
       $('#max_fitness').html(spec.max_fitness)
       $('#offspring').html(spec.offspring)
