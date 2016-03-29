@@ -1,0 +1,21 @@
+from django import forms
+
+class ExperimentForm(forms.Form):
+    name = forms.CharField()
+    generations = forms.IntegerField()
+    population_size = forms.IntegerField()
+    coefficient_matching = forms.DecimalField()
+    coefficient_disjoint = forms.DecimalField()
+    compatibility_threshold = forms.DecimalField()
+    survival_rate = forms.DecimalField()
+    stagnation_threshold = forms.IntegerField()
+    mate_only = forms.DecimalField()
+    mutate_only = forms.DecimalField()
+    mutate_neuron = forms.DecimalField()
+    mutate_gene = forms.DecimalField()
+    mutate_power = forms.DecimalField()
+    fitness_function = forms.CharField(widget=forms.Textarea)
+    input_nodes = forms.IntegerField()
+    output_nodes = forms.IntegerField()
+    runs = forms.IntegerField()
+    allow_recurrent = forms.BooleanField(required=False)

@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from . import models
+from .forms import ExperimentForm
 
 import json
 import decimal
@@ -148,10 +149,35 @@ def populations(request, exp_id):
 def experiments(request):
     exp_list = models.Experiment.objects.all()
 
-    context = {
-            'exp_list': exp_list,
+    if exp_list:
+        exp_conf = json.loads(exp_list[0].config)
+        
+        initial = {
             'name': exp_list[0].name,
-            'conf': json.loads(exp_list[0].config),
+            'generations': exp_conf['generations'], 
+            'population_size': exp_conf['pop_size'],
+            'coefficient_matching': exp_conf['coef_matching'],
+            'coefficient_disjoint': exp_conf['coef_disjoint'],
+            'compatibility_threshold': exp_conf['compat_threshold'],
+            'survival_rate': exp_conf['survival_rate'],
+            'stagnation_threshold': exp_conf['stagnation_threshold'],
+            'mate_only': exp_conf['mate_only_prob'],
+            'mutate_only': exp_conf['mutate_only_prob'],
+            'mutate_neuron': exp_conf['mutate_neuron_prob'],
+            'mutate_gene': exp_conf['mutate_gene_prob'],
+            'mutate_power': exp_conf['mutate_power'],
+            'fitness_function': exp_conf['fitness_func'],
+            'input_nodes': exp_conf['num_input'],
+            'output_nodes': exp_conf['num_output'],
+            'runs': exp_conf['runs'],
+            'allow_recurrent': exp_conf['allow_recurrent'],
+        }
+    
+    exp_form = ExperimentForm(initial)
+    
+    context = {
+            'exp_list': map(lambda x: x.id, exp_list),
+            'form': exp_form,
     }
 
     return render(request, 'neatweb/experiments.html', context)

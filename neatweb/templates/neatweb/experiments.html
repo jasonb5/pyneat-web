@@ -1,57 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-Welcome to the pyNEAT!<br>
 
-<select id="experiments">
-{% for e in exp_list %}
-  <option value="{{ e.id }}">Experiment {{ e.id }}</option>   
-{% endfor %}
-</select>
+<div>
+Welcome to the pyNEAT!
+<div>
 
-{% with sel=exp_list|first %}
-<form id="exp_form" action="/neat/experiment-{{ sel.id }}">
-  <input type="submit" value="Select">
-</form>
-{% endwith %}
+{% if exp_list %}
+  <select id="experiments">
+  {% for e in exp_list %}
+    <option value="{{ e }}">Experiment {{ e }}</option>   
+  {% endfor %}
+  </select>
 
-<br>
+  {% with sel=exp_list|first %}
+    <form id="exp_form" action="/neat/experiment-{{ sel }}">
+      <input type="submit" value="Select">
+    </form>
+  {% endwith %}
+{% else %}
+  No experiments have been run.
+{% endif %}
 
-Name:<br> 
-<input type="text" id="name" value="{{ name }}"><br>
-Runs:<br>
-<input type="number" id="runs" min="0" max="1000" step="1" value="{{ conf.runs }}"><br>
-Population Size:<br>
-<input type="number" id="pop_size" min="0" max="1000" step="1" value="{{ conf.pop_size }}"><br>
-Generations:<br>
-<input type="number" id="generations" min="0" max="1000" step="1" value="{{ conf.generations }}"><br>
-Input:<br>
-<input type="number" id="input" min="0" max="1000" step="1" value="{{ conf.num_input }}"><br>
-Output:<br>
-<input type="number" id="output" min="0" max="1000" step="1" value="{{ conf.num_output }}"><br>
-Mutation Power:<br>
-<input type="number" id="mut_power" min="0" max="1000" step="0.1" value="{{ conf.mutate_power }}"><br>
-Coefficient Matching:<br>
-<input type="number" id="coef_matching" min="0" max="1000" step="0.1" value="{{ conf.coef_matching }}"><br>
-Coefficient Disjoint:<br>
-<input type="number" id="coef_disjoin" min="0" max="1000" step="0.1" value="{{ conf.coef_disjoint }}"><br>
-Compatibility Threshold:<br>
-<input type="number" id="compat_threshold" min="0" max="1000" step="0.1" value="{{ conf.compat_threshold }}"><br>
-Mutate Neuron Probability:<br>
-<input type="number" id="mut_neuron" min="0" max="1000" step="0.01" value="{{ conf.mutate_neuron_prob }}"><br>
-Mutate Gene Probability:<br>
-<input type="number" id="mut_gene" min="0" max="1000" step="0.01" value="{{ conf.mutate_gene_prob }}"><br>
-Mutate Only Probability:<br>
-<input type="number" id="mut_only"min="0" max="1000" step="0.01" value="{{ conf.mutate_only_prob }}"><br>
-Mate Only Probability:<br>
-<input type="number" id="mate_only" min="0" max="1000" step="0.1" value="{{ conf.mate_only_prob }}"><br>
-Survival Rate:<br>
-<input type="number" id="survival" min="0" max="1000" step="0.1" value="{{ conf.survival_rate }}"><br>
-Stagnation Threshold:<br>
-<input type="number" id="stagnation" min="0" max="1000" step="1" value="{{ conf.stagnation_threshold }}"><br>
-Data:<br>
-<textarea id="data" rows="8" cols="32">{{ conf.data }}</textarea><br>
-Fitness Function:<br>
-<textarea id="fitness" rows="8" cols="75">{{ conf.fitness_func }}</textarea><br>
+<div>
+  {{ form.as_ul }}
+</div>
 
 {% endblock %}
