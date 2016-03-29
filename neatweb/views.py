@@ -151,6 +151,8 @@ def populations(request, exp_id):
 def experiments(request):
     exp_list = models.Experiment.objects.all()
 
+    exp_form = None
+
     if exp_list:
         exp_conf = json.loads(exp_list[0].config)
         
@@ -175,7 +177,7 @@ def experiments(request):
             'allow_recurrent': exp_conf['allow_recurrent'],
         }
     
-    exp_form = ExperimentForm(initial)
+        exp_form = ExperimentForm(initial)
     
     context = {
             'exp_list': map(lambda x: x.id, exp_list),

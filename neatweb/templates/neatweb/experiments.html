@@ -7,23 +7,23 @@ Welcome to the pyNEAT!
 <div>
 
 {% if exp_list %}
-  <select id="experiments">
-  {% for e in exp_list %}
+<select id="experiments">
+{% for e in exp_list %}
     <option value="{{ e }}">Experiment {{ e }}</option>   
-  {% endfor %}
-  </select>
+{% endfor %}
+</select>
 
-  {% with sel=exp_list|first %}
-    <form id="exp_form" action="/neat/experiment-{{ sel }}">
-      <input type="submit" value="Select">
-    </form>
-  {% endwith %}
-{% else %}
-  No experiments have been run.
-{% endif %}
+{% with sel=exp_list|first %}
+<form id="exp_form" action="/neat/experiment-{{ sel }}">
+    <input type="submit" value="Select">
+</form>
+{% endwith %}
 
 <div>
   {{ form.as_ul }}
 </div>
+{% else %}
+  No experiments have been run.
+{% endif %}
 
 {% endblock %}
