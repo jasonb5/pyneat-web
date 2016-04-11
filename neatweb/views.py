@@ -3,6 +3,12 @@ from django.shortcuts import render
 
 from . import models
 from .forms import ExperimentForm
+from .pyneatwrapper import pyneat_wrapper
+
+from pyneat import Conf
+
+from rq import Queue
+from redis import Redis
 
 import json
 import decimal
@@ -85,6 +91,58 @@ def experiment_query(request):
     conf['name'] = experiment.name
 
     return HttpResponse(json.dumps(conf))
+
+def submission(request):
+    if request.method == 'POST':
+        form = ExperimentForm(request.POST)
+
+        if form.is_valid():
+            conf = Conf()
+
+            for k, v in form.cleaned_data.items():
+                if isinstance(v, decimal.Decimal):
+                    conf.__dict__[k] = float(v)
+                else:
+                    conf.__dict__[k] = v
+
+            q = Queue(connection=Redis(host='redis', port=6379))
+
+            q.enqueue(pyneat_wrapper, conf)
+    else:
+        conf = Conf()
+        initial = {}
+
+        for k, v in conf.__dict__.items():
+            initial[k] = v 
+
+        initial['name'] = 'Test'
+        initial['fitness_func'] = """def evaluate(net):
+        data = ((0.0, 0.0, 1.0),
+                (1.0, 0.0, 1.0),
+                (0.0, 1.0, 1.0),
+                (1.0, 1.0, 1.0))
+        result = []
+        winner = False
+
+        for d in data:
+            result.append(net.activate(d))
+
+        if result[0] < 0.5 and result[1] >= 0.5 and result[2] >= 0.5 and result[3] < 0.5:
+            winner = True
+
+        error = math.fabs(result[0]+(1-result[1])+(1-result[2])+result[3])
+
+        fitness = math.pow(4-error, 2)
+
+        return fitness, winner"""
+
+        form = ExperimentForm(initial)
+
+    context = {
+            'form': form,
+    }
+
+    return render(request, 'neatweb/submission.html', context)
 
 def organisms(request, exp_id, pop_id, gen_id, spec_id):
     org_list = models.Organism.objects.filter(
