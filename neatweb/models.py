@@ -4,6 +4,9 @@ from django.db import models
 
 class Experiment(models.Model):
     name = models.CharField(max_length=64)
+    jid = models.CharField(max_length=37)
+    start = models.DateTimeField()
+    end = models.DateTimeField(null=True)
     config = models.TextField()
 
 class Population(models.Model):

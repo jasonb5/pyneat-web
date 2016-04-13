@@ -9,6 +9,9 @@ django.setup()
 
 from . import models
 
+from redis import Redis
+from rq import get_current_job
+
 import json
 import decimal
 
@@ -23,12 +26,19 @@ class NeatObserver(DataObserver):
         self.exp = None
         self.pop = None
 
-    def experiment(self, name, conf):
+    def experiment(self, name, conf, dt):
+        job = get_current_job(connection=Redis(host='redis', port=6379))
+
         self.exp = models.Experiment(
                 name = name,
+                jid = job.id,
+                start = dt,
                 config = json.dumps(conf.__dict__, default=default_serializer))
 
         self.exp.save()
+
+    def experiment_end(self, dt):
+        models.Experiment.objects.filter(pk=self.exp.pk).update(end=dt)
 
     def population(self, pop_index):
         self.pop = models.Population(
