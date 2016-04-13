@@ -6,9 +6,6 @@ class Experiment(models.Model):
     name = models.CharField(max_length=64)
     config = models.TextField()
 
-    def from_json(self):
-        return json.loads(config)
-
 class Population(models.Model):
     rel_index = models.IntegerField()
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
