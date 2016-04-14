@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.forms.models import model_to_dict
 
 from . import models
 from .forms import ExperimentForm
@@ -29,10 +30,24 @@ def organism_query(request):
     if org_id:
         organism = models.Organism.objects.get(pk=org_id)
 
+        context['winner'] = organism.winner
         context['fitness'] = organism.fitness
         context['marked'] = organism.marked
         context['rank'] = organism.rank
-        context['network'] = organism.network
+
+        network = json.loads(organism.network)
+
+        nodes = { }
+
+        for g in network['genes']:
+            if not g['inode'] in nodes:
+                nodes[g['inode']] = True
+
+            if not g['onode'] in nodes:
+                nodes[g['onode']] = True
+
+        context['nodes'] = nodes.keys()
+        context['genes'] = network['genes']
     
     return HttpResponse(json.dumps(context, default=decimal_serializer))
 
@@ -147,10 +162,26 @@ def organisms(request, exp_id, pop_id, gen_id, spec_id):
             generation_id=gen_id,
             species_id=spec_id)
 
+    org_ids = dict(map(lambda x: (x.rel_index, x.pk), org_list))
+
+    sel_org = org_list.get(pk=org_ids[0])
+
+    genes = json.loads(sel_org.network)['genes']
+
+    nodes = {}
+
+    for g in genes:
+        if not g['inode'] in nodes:
+            nodes[g['inode']] = True
+
+        if not g['onode'] in nodes:
+            nodes[g['onode']] = True
+
     context = {
-            'exp_id': exp_id,
-            'org_list': org_list,
-            'network': json.loads(org_list[0].network),
+            'org_ids': org_ids,
+            'sel_org': sel_org.to_dict(),
+            'nodes': nodes.keys(),
+            'genes': genes,
     }
 
     return render(request, 'neatweb/organisms.html', context)

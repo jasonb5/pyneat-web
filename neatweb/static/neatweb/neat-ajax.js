@@ -40,40 +40,29 @@ $(document).ready(function() {
     });    
   });
 
-  $('#organisms').change(function() {
+  $('select#organisms').change(function() {
     var orgId = $(this).val();
 
     $.get('/neat/organism/', {organism_id: orgId}, function(data) {
-      var org = jQuery.parseJSON(data);
+      var org = $.parseJSON(data);
 
-      $('#fitness').html(org.fitness);
+      $('#winner').html(org.winner.toString());
       $('#rank').html(org.rank);
       $('#marked').html(org.marked.toString());
+      $('#fitness').html(org.fitness);
 
-      try {
-        var network = jQuery.parseJSON(org.network);
-        var table = '<table border="1"><tr><td>Inode</td><td>Onode</td><td>Weight</td><td>Enabled</td></td>';
+      var nodes = new vis.DataSet();
+      var edges = new vis.DataSet();
 
-        $('#input').html(network.input);
-        $('#hidden').html(network.hidden);
-        $('#output').html(network.output);
-
-        $.each(network.genes, function() {
-          table += '<tr>';
-          table += '<td>' + this['inode'] + '</td>';
-          table += '<td>' + this['onode'] + '</td>';
-          table += '<td>' + this['weight'] + '</td>';
-          table += '<td>' + this['enabled'] + '</td>';
-          table += '</tr>';
-        });
-
-        table += '</table>';
-
-        $('#genes').html(table);
+      for (n in org.nodes) {
+        nodes.add({id: org.nodes[n], label: 'Node ' + org.nodes[n] });
       }
-      catch (err) {
-        $('#genes').html(err.message);
+
+      for (g in org.genes) {
+        edges.add({from: org.genes[g].inode, to: org.genes[g].onode, arrows: 'to', label: org.genes[g].weight, font: {align: 'bottom'}});
       }
+
+      network.setData({nodes: nodes, edges: edges});
     });
   });
 

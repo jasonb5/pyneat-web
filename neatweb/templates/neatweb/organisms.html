@@ -1,56 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>
   <select id="organisms">
-  {% for o in org_list %}
-    <option value="{{ o.id }}">Organism {{ o.id }}</option>
+  {% for rel_index, pk in org_ids.items %}
+    <option value="{{ pk }}">Organism {{ rel_index }}</option>
   {% endfor %}
   </select>
-</div><br>
-{% with org_sel=org_list|first %}
-Fitness: 
-<div id="fitness">
-  {{ org_sel.fitness }}
-</div><br>
-Rank: 
-<div id="rank">
-  {{ org_sel.rank }}
-</div><br>
-Marked:
-<div id="marked">
-        {{ org_sel.marked }}
-</div><br>
-{% endwith %}
-Input:
-<div id="input">
-  {{ network.input }}
-</div><br>
-Hidden:
-<div id="hidden">
-  {{ network.hidden }}
-</div><br>
-Output:
-<div id="output">
-  {{ network.output }}
-</div><br>
-Genes:
-<div id="genes">
+
   <table border="1">
+  {% for key, value in sel_org.items %}
     <tr>
-      <td>Inode</td>
-      <td>Onode</td>
-      <td>Weight</td>
-      <td>Enabled</td>
-    </tr>
-  {% for g in network.genes %}
-    <tr>
-      <td>{{ g.inode }}</td>
-      <td>{{ g.onode }}</td>
-      <td>{{ g.weight }}</td>
-      <td>{{ g.enabled }}</td>
+      <td>{{ key }}</td>
+      <td id="{{ key }}">{{ value }}</td>
     </tr>
   {% endfor %}
   </table>
-</div>
+
+  <div id="mynetwork">
+  </div>
+
+  <script type="text/javascript">
+    var nodes = new vis.DataSet([
+    {% for n in nodes %}
+      {id: {{ n }}, label: 'Node ' + {{ n }}},
+    {% endfor %}
+    ]);
+
+    var edges = new vis.DataSet([
+    {% for g in genes %}
+      {from: {{ g.inode }}, to: {{ g.onode }}, arrows: 'to', label: {{ g.weight }}, font: {align: 'bottom'}},
+    {% endfor %}
+    ]);
+
+    var container = document.getElementById('mynetwork');
+    var data = {
+      nodes: nodes,
+      edges: edges,
+    };
+    var options = {
+      height: '400px',
+      layout: {
+        hierarchical: {
+          levelSeparation: 250,
+          direction: 'RL', 
+        }
+      }
+    };
+    var network = new vis.Network(container, data, options);
+  </script>
+
 {% endblock %}

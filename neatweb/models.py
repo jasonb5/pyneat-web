@@ -37,3 +37,13 @@ class Organism(models.Model):
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
     population = models.ForeignKey(Population, on_delete=models.CASCADE)
     generation = models.ForeignKey(Generation, on_delete=models.CASCADE)
+
+    def to_dict(self):
+        display_fields = ('winner', 'marked', 'fitness', 'rank')
+        data = { }
+
+        for f in self._meta.concrete_fields:
+            if f.name in display_fields:
+                data[f.name] = f.value_from_object(self)
+
+        return data
