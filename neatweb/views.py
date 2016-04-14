@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 
 from . import models
 from .forms import ExperimentForm
@@ -78,19 +79,15 @@ def generation_query(request):
     return HttpResponse(json.dumps(context, default=decimal_serializer))
 
 def experiment_query(request):
-    exp_id = None
+    experiment = None
 
     if request.method == 'GET':
         exp_id = request.GET['experiment_id']
 
-    if exp_id:
-        experiment = models.Experiment.objects.get(pk=exp_id)
+        if exp_id:
+            experiment = get_object_or_404(models.Experiment, pk=exp_id)
 
-    # Rebuild json to include name. 
-    conf = json.loads(experiment.config)
-    conf['name'] = experiment.name
-
-    return HttpResponse(json.dumps(conf))
+    return HttpResponse(experiment.config)
 
 def submission(request):
     if request.method == 'POST':
@@ -208,21 +205,9 @@ def populations(request, exp_id):
 
 def experiments(request):
     exp_list = models.Experiment.objects.all()
-
-    exp_form = None
-
-    if exp_list:
-        initial = {'name': exp_list[0].name,}
-        exp_conf = json.loads(exp_list[0].config)
-
-        for k, v in exp_conf.iteritems():
-            initial[k] = v
-      
-        exp_form = ExperimentForm(initial)
     
     context = {
-            'exp_list': map(lambda x: x.id, exp_list),
-            'form': exp_form,
+            'exp_list': exp_list,
     }
 
     return render(request, 'neatweb/experiments.html', context)

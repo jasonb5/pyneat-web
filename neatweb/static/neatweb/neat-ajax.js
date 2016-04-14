@@ -1,4 +1,45 @@
 $(document).ready(function() {
+  $.fn.exists = function() {
+    return this.length !== 0;
+  }
+
+  $('button#show').click(function() {
+    var exp_id = $(this).attr('data-id');
+
+    $.get('/neat/experiment/', { experiment_id: exp_id }, function(data) {
+      var exp = $.parseJSON(data);
+      
+      var details = $('#details');
+
+      if (details.exists()) {
+        $.each(exp, function(k, v) {
+          if (k == 'fitness_func') {
+            $('#' + k).html('<textarea rows="10" cols="75">' + v + '</textarea>');
+          } else {
+            $('#' + k).html(v);
+          }
+        });
+      } else {
+        var tbl = '<table id="details" border="1">';
+
+        $.each(exp, function(k, v) {
+          tbl += '<tr>';
+          tbl += '<td>' + k + '</td>';
+          if (k === 'fitness_func') {
+            tbl += '<td id="' + k + '"><textarea rows="10" cols="75">' + v + '</textarea></td>';
+          } else {
+            tbl += '<td id="' + k + '">' + v + '</td>';
+          }
+          tbl += '</tr>'; 
+        });
+
+        tbl += '</table>';
+
+        $('body').append(tbl);
+      }
+    });    
+  });
+
   $('#organisms').change(function() {
     var orgId = $(this).val();
 
