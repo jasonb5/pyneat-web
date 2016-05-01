@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table border="1">
+{% for k, v in fields.items %}
+  <tr>
+    <td>{{ k }}</td>
+    <td>{{ v }}</td>
+  </tr>
+{% endfor %}
+</table>
+
+<div id="neural-network">
+</div>
+<script type="text/javascript">
+  var nodes = new vis.DataSet();
+  var edges = new vis.DataSet();
+
+{% for k, v in neurons.items %}
+  {% for n in v %}
+  nodes.add({
+    id: {{ n }}, 
+    label: '{{ k }} {{ n }}',
+  });
+  {% endfor %}
+{% endfor %}
+
+{% for g in genes %}
+  edges.add({
+    from: {{ g.inode }}, 
+    to: {{ g.onode }},
+    arrows: 'to',
+    label: '{{ g.weight }}',
+    font: {
+      align: 'top',
+    },
+  });
+{% endfor %}
+
+  var container = document.getElementById('neural-network');
+  var data = {
+    nodes: nodes,
+    edges: edges,
+  };
+  var options = {
+    width: '600px',
+    height: '400px',  
+    layout: {
+      hierarchical: {
+        direction: 'RL',
+        levelSeparation: '250',
+      }
+    },
+  };
+  var network = new vis.Network(container, data, options);
+</script>
+
+{% endblock %}

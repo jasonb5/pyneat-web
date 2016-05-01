@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form id="population-form" action="" method="post">
+  {% csrf_token %}
+  <select id="population-sel">
+  {% for pop in pop_list %}
+    <option value="{{ pop.pk }}">Population {{ pop.rel_index }}</option>
+  {% endfor %}
+  </select>
+  <input type="submit" value="Select" />
+</form>
+
+<table border="1">
+{% for key, value in exp_config.items %}
+  <tr>
+    <td>{{ key }}</td>
+    <td>{{ value }}</td>
+  </tr>
+{% endfor %}
+</table>
+
+{% endblock %}

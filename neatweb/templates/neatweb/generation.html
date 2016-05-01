@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form id="species-form" action="" method="post">
+  {% csrf_token %}
+  <select id="species-sel">
+  {% for spec in spec_list %}
+  <option value="{{ spec.pk }}">Species {{ spec.rel_index }}</option>
+  {% endfor %}
+  </select>
+  <input type="submit" value="Select" />
+</form>
+
+{% endblock %}

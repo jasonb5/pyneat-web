@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form id="generation-form" action="" method="post">
+  {% csrf_token %}
+  <select id="generation-sel">
+  {% for gen in gen_list %}
+    <option value="{{ gen.pk }}">Generation {{ gen.rel_index }}</option>
+  {% endfor %}
+  </select>
+  <input type="submit" value="Select" />
+</form>
+
+{% if pop.winners %}
+  A winner was found.
+{% else %}
+  No winner was found.
+{% endif %}
+
+
+{% endblock %}

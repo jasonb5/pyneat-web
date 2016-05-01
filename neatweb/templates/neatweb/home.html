@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if exp_list %}
+  <table border="1">
+  <tr>
+    <th>Name</th>
+    <th>Start</th>
+    <th>End</th>
+  </tr>
+  {% for exp in exp_list %}
+    <tr>
+      <td>{{ exp.name }}</td>
+      <td>{{ exp.start }}</td>
+      <td>{{ exp.end }}</td>
+      <td>
+        <form action="{% url 'experiment' exp.pk %}" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Select" />
+        </form>
+    </tr> 
+  {% endfor %}
+  </table>
+{% else %}
+  No experiments have been run.
+{% endif %}
+
+{% endblock %}

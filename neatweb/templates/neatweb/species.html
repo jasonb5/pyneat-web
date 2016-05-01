@@ -1,42 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>
-  <select id="species">
-  {% for s in spec_list %}
-    <option value="{{ s.id }}">Species {{ s.id }}</option>
+
+<form id="organism-form" action="" method="post">
+  {% csrf_token %}
+  <select id="organism-sel">
+  {% for org in org_list %}
+    <option value="{{ org.pk }}">Organism {{ org.rel_index }}</option>
   {% endfor %}
   </select>
-
-{% with sel_spec=spec_list|first %}
-<form id="spec_form"
-      action="/neat/experiment-{{ exp_id }}/population-{{ sel_spec.population_id }}/generation-{{ sel_spec.generation_id}}/species-{{ sel_spec.id }}">
-  <input type="submit" value="Select">
+  <input type="submit" value="Select" />
 </form>
-<div><br>
-Organisms:
-<div id="organisms">
-  {{ org_count }}
-</div><br>
-Marked:
-<div id="marked">
-  {{ sel_spec.marked }}
-</div><br>
-Average Fitness:
-<div id="avg_fitness">
-  {{ sel_spec.avg_fitness }}
-</div><br>
-Max Fitness:
-<div id="max_fitness">
-  {{ sel_spec.max_fitness }}
-</div><br>
-Offspring:
-<div id="offspring">
-  {{ sel_spec.offspring }}
-</div><br>
-Age Since Improvement:
-<div id="age_since_imp">
-  {{ sel_spec.age_since_imp }}
-</div><br>
-{% endwith %}
+
+<table border="1">
+{% for k, v in fields.items %}
+  <tr>
+    <td>{{ k }}</td>
+    <td>{{ v }}</td>
+  </tr>
+{% endfor %}
+</table>
+
 {% endblock %}
