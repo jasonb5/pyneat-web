@@ -2,6 +2,11 @@
 
 {% block content %}
 
+<ul>
+  <li><a href="{% url 'population' org.population.pk %}">Population {{ org.population.rel_index }}</a></li>
+  <li><a href="{% url 'generation' org.generation.pk %}">Generation {{ org.generation.rel_index }}</a></li>
+  <li><a href="{% url 'species' org.species.pk %}">Species {{ org.species.rel_index }}</a></li>
+</ul>
 <table border="1">
 {% for k, v in fields.items %}
   <tr>
@@ -10,7 +15,6 @@
   </tr>
 {% endfor %}
 </table>
-
 <div id="neural-network">
 </div>
 <script type="text/javascript">

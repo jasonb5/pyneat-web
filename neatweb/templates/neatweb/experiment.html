@@ -2,6 +2,10 @@
 
 {% block content %}
 
+<ul>
+  <li><a href="{% url 'home' %}">Home</a></li>
+</ul>
+
 <form id="population-form" action="" method="post">
   {% csrf_token %}
   <select id="population-sel">

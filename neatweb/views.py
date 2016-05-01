@@ -62,6 +62,7 @@ def organism(request, org_pk):
     }
      
     context = {
+            'org': org,
             'fields': valid_fields,
             'neurons': neurons,
             'genes': network['genes'],
