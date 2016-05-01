@@ -51,9 +51,21 @@ def organism(request, org_pk):
     valid_fields = org.get_concrete_fields(('id'))
     network = json.loads(valid_fields.pop('network'))
 
-    inodes = [i for i in xrange(network['input'])]
-    hnodes = [network['input']+i for i in xrange(network['hidden'])]
-    onodes = [1000+i for i in xrange(network['output'])]
+    level = 0
+    inodes = [(i, level) for i in xrange(network['input'])]
+
+    # Adds some psuedo level separation, TODO level needs to 
+    # be dependent on links coming in.
+    hnodes = []
+    for i in xrange(network['hidden']):
+        idx = network['input']+i
+        if idx % network['input'] == 0:
+            level += 1
+
+        hnodes.append((idx, level))
+
+    level += 1
+    onodes = [(1000+i, level) for i in xrange(network['output'])]
 
     neurons = {
             'input': inodes,

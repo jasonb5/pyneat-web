@@ -24,8 +24,9 @@
 {% for k, v in neurons.items %}
   {% for n in v %}
   nodes.add({
-    id: {{ n }}, 
-    label: '{{ k }} {{ n }}',
+    id: {{ n.0 }},
+    label: '{{ k }} {{ n.0 }}',
+    level: {{ n.1 }},
   });
   {% endfor %}
 {% endfor %}
@@ -52,8 +53,9 @@
     height: '400px',  
     layout: {
       hierarchical: {
-        direction: 'RL',
-        levelSeparation: '250',
+        direction: 'LR',
+        levelSeparation: 300,
+        nodeSpacing: 300,
       }
     },
   };
