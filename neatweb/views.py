@@ -78,6 +78,7 @@ def organism(request, org_pk):
             'fields': valid_fields,
             'neurons': neurons,
             'genes': network['genes'],
+            'spec_fitness': org.species_fitness(),
     }
 
     return render(request, 'neatweb/organism.html', context)

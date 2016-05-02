@@ -15,8 +15,11 @@
   </tr>
 {% endfor %}
 </table>
-<div id="neural-network">
-</div>
+
+<div id="neural-network"></div>
+
+<div id="spec-graph"></div>
+
 <script type="text/javascript">
   var nodes = new vis.DataSet();
   var edges = new vis.DataSet();
@@ -60,6 +63,24 @@
     },
   };
   var network = new vis.Network(container, data, options);
+
+  var xdata = [];
+  var ydata = [];
+
+{% for spec in spec_fitness %}
+  xdata.push({{ spec.rel_index }});
+  ydata.push({{ spec.fitness }});
+{% endfor %}
+
+  var data = [
+    {
+      x: xdata,
+      y: ydata,
+      type: 'bar',
+    }
+  ];
+
+  Plotly.newPlot('spec-graph', data);
 </script>
 
 {% endblock %}
