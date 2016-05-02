@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block breadcrumbs %}
-<li class="active"><a href="{% url 'experiment' exp.pk %}">Experiment</a></li>
+<li class="active">
+  <a href="{% url 'experiment' exp.pk %}">Experiment {{ exp.pk }}</a>
+</li>
 {% endblock %}
 
 {% block content %}

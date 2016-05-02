@@ -1,17 +1,19 @@
 {% extends "base.html" %}
 
 {% block breadcrumbs %}
+{% with pop=spec.population %}
 <li>
-  <a href="{% url 'experiment' spec.population.experiment.pk %}">Experiment</a>
+  <a href="{% url 'experiment' pop.experiment.pk %}">Experiment {{ pop.experiment.pk }}</a>
 </li>
 <li>
-  <a href="{% url 'population' spec.population.pk %}">Population</a>
+  <a href="{% url 'population' pop.pk %}">Population {{ pop.rel_index }}</a>
 </li>
+{% endwith %}
 <li>
-  <a href="{% url 'generation' spec.generation.pk %}">Generation</a>
+  <a href="{% url 'generation' spec.generation.pk %}">Generation {{ spec.generation.rel_index }}</a>
 </li>
 <li class="active">
-  <a href="{% url 'species' spec.pk %}">Species</a>
+  <a href="{% url 'species' spec.pk %}">Species {{ spec.rel_index }}</a>
 </li>
 {% endblock %}
 

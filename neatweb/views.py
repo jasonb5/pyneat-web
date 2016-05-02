@@ -13,6 +13,7 @@ from rq import Queue
 from redis import Redis
 
 import json
+import decimal
 
 def submission(request):
     if request.method == 'POST':

@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
 {% block breadcrumbs %}
-<li><a href="{% url 'experiment' pop.experiment.pk %}">Experiment {{ pop.experiment.rel_index }}</a></li>
-<li class="active"><a href="{% url 'population' pop.pk %}">Population</a></li>
+<li>
+  <a href="{% url 'experiment' pop.experiment.pk %}">Experiment {{ pop.experiment.pk }}</a>
+</li>
+<li class="active">
+  <a href="{% url 'population' pop.pk %}">Population {{ pop.rel_index }}</a>
+</li>
 {% endblock %}
 
 {% block content %}
