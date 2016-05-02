@@ -30,18 +30,21 @@ class Population(models.Model):
     def generation_fitness(self):
         return Organism.objects.filter(
                 population=self.pk).values(
-                        'generation').annotate(
+                        'generation__rel_index').annotate(
                                 sfitness=ExpressionWrapper(
-                                    Sum('fitness')/Count('generation'), 
-                                    output_field=FloatField()))
+                                    Sum('fitness')/Count('generation__rel_index'),
+                                    output_field=FloatField()),
+                                grel_index=F('generation__rel_index'))
 
     def species_fitness(self):
         return Organism.objects.filter(
                 population=self.pk).values(
-                        'species').annotate(
+                        'species__rel_index').annotate(
                                 sfitness=ExpressionWrapper(
-                                    Sum('fitness')/Count('species'),
-                                    output_field=FloatField()))
+                                    Sum('fitness')/Count('species__rel_index'),
+                                    output_field=FloatField()),
+                                srel_index=F('species__rel_index'))
+                                    
 
 class Generation(models.Model):
     rel_index = models.IntegerField()

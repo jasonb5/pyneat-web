@@ -43,7 +43,7 @@
   var ydata = [];
 
 {% for gen in gen_fitness %}
-  xdata.push({{ gen.generation }});
+  xdata.push({{ gen.grel_index }});
   ydata.push({{ gen.sfitness }});
 {% endfor %}
 
@@ -61,7 +61,7 @@
   var ydata = [];
 
 {% for spec in spec_fitness %}
-  xdata.push({{ spec.species }});
+  xdata.push({{ spec.srel_index }});
   ydata.push({{ spec.sfitness }});
 {% endfor %}
 
