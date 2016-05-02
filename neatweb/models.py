@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models import F
 from django.db.models import Sum
 from django.db.models import Count
 from django.db.models import ExpressionWrapper
@@ -55,12 +56,14 @@ class Generation(models.Model):
                         'rel_index', 'fitness')
 
     def species_fitness(self):
-        return Organism.objects.filter(
-                generation=self.pk).values(
-                        'species').annotate(
-                                sfitness=ExpressionWrapper(
-                                    Sum('fitness')/Count('species'),
-                                    output_field=FloatField()))
+        return Organism.objects.select_related(
+                'species').filter(
+                        generation=self.pk).values(
+                            'species').annotate(
+                                    sfitness=ExpressionWrapper(
+                                        Sum('fitness')/Count('species'),
+                                        output_field=FloatField()),
+                                    srel_index=F('species__rel_index'))
 
 class Species(models.Model):
     rel_index = models.IntegerField()

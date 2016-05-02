@@ -60,7 +60,7 @@
   var ydata = [];
 
 {% for spec in spec_fitness %}
-  xdata.push({{ spec.species }});
+  xdata.push({{ spec.srel_index }});
   ydata.push({{ spec.sfitness }});
 {% endfor %}
 
