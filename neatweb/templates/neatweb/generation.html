@@ -16,4 +16,46 @@
   <input type="submit" value="Select" />
 </form>
 
+<div id="spec-graph"></div>
+
+<div id="org-graph"></div>
+
+<script type="text/javascript">
+  var xdata = [];
+  var ydata = [];
+
+{% for org in org_fitness %}
+  xdata.push({{ org.rel_index }});
+  ydata.push({{ org.fitness }});
+{% endfor %}
+
+  var data = [
+    {
+      x: xdata,
+      y: ydata,
+      type: 'bar',
+    }
+  ];
+
+  Plotly.newPlot('org-graph', data);
+
+  var xdata = [];
+  var ydata = [];
+
+{% for spec in spec_fitness %}
+  xdata.push({{ spec.species }});
+  ydata.push({{ spec.sfitness }});
+{% endfor %}
+
+  var data = [
+    {
+      x: xdata,
+      y: ydata,
+      type: 'bar',
+    }
+  ];
+
+  Plotly.newPlot('spec-graph', data);
+</script>
+
 {% endblock %}

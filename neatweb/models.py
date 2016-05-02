@@ -49,6 +49,19 @@ class Generation(models.Model):
     def species(self):
         return Species.objects.filter(generation=self.pk)
 
+    def organism_fitness(self):
+        return Organism.objects.filter(
+                generation=self.pk).values(
+                        'rel_index', 'fitness')
+
+    def species_fitness(self):
+        return Organism.objects.filter(
+                generation=self.pk).values(
+                        'species').annotate(
+                                sfitness=ExpressionWrapper(
+                                    Sum('fitness')/Count('species'),
+                                    output_field=FloatField()))
+
 class Species(models.Model):
     rel_index = models.IntegerField()
     marked = models.BooleanField()

@@ -99,6 +99,8 @@ def generation(request, gen_pk):
     context = {
             'gen': gen,
             'spec_list': gen.species(),
+            'org_fitness': gen.organism_fitness(),
+            'spec_fitness': gen.species_fitness(),
     }
 
     return render(request, 'neatweb/generation.html', context)
