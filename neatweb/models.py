@@ -1,6 +1,10 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models import Sum
+from django.db.models import Count
+from django.db.models import ExpressionWrapper
+from django.db.models.fields import FloatField
 
 class Experiment(models.Model):
     name = models.CharField(max_length=64)
@@ -21,6 +25,22 @@ class Population(models.Model):
 
     def winners(self):
         return Organism.objects.filter(population=self.pk, winner=True)
+
+    def generation_fitness(self):
+        return Organism.objects.filter(
+                population=self.pk).values(
+                        'generation').annotate(
+                                sfitness=ExpressionWrapper(
+                                    Sum('fitness')/Count('generation'), 
+                                    output_field=FloatField()))
+
+    def species_fitness(self):
+        return Organism.objects.filter(
+                population=self.pk).values(
+                        'species').annotate(
+                                sfitness=ExpressionWrapper(
+                                    Sum('fitness')/Count('species'),
+                                    output_field=FloatField()))
 
 class Generation(models.Model):
     rel_index = models.IntegerField()

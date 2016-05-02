@@ -109,6 +109,8 @@ def population(request, pop_pk):
     context = {
             'pop': pop,
             'gen_list': pop.generations(),
+            'gen_fitness': pop.generation_fitness(),
+            'spec_fitness': pop.species_fitness(),
     }
 
     return render(request, 'neatweb/population.html', context)

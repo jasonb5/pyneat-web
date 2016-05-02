@@ -22,5 +22,46 @@
   No winner was found.
 {% endif %}
 
+<div id="gen-graph"></div>
+
+<div id="spec-graph"></div>
+
+<script type="text/javascript">
+  var xdata = [];
+  var ydata = [];
+
+{% for gen in gen_fitness %}
+  xdata.push({{ gen.generation }});
+  ydata.push({{ gen.sfitness }});
+{% endfor %}
+
+  var data = [
+    {
+      x: xdata,
+      y: ydata,
+      type: 'bar',
+    }
+  ];
+
+  Plotly.newPlot('gen-graph', data);
+
+  var xdata = [];
+  var ydata = [];
+
+{% for spec in spec_fitness %}
+  xdata.push({{ spec.species }});
+  ydata.push({{ spec.sfitness }});
+{% endfor %}
+
+  var data = [
+    {
+      x: xdata,
+      y: ydata,
+      type: 'bar',
+    }
+  ];
+
+  Plotly.newPlot('spec-graph', data);
+</script>
 
 {% endblock %}
