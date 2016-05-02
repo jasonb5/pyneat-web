@@ -25,4 +25,46 @@
 {% endfor %}
 </table>
 
+<div id="org-graph"></div>
+
+<div id="gen-graph"></div>
+
+<script type="text/javascript">
+  var xdata = [];
+  var ydata = [];
+
+{% for org in org_fitness %}
+  xdata.push({{ org.rel_index }});
+  ydata.push({{ org.fitness }});
+{% endfor %}
+
+  var data = [
+    {
+      x: xdata,
+      y: ydata,
+      type: 'bar',
+    }
+  ];
+
+  Plotly.newPlot('org-graph', data);
+
+  var xdata = [];
+  var ydata = [];
+
+{% for gen in gen_fitness %}
+  xdata.push({{ gen.generation }});
+  ydata.push({{ gen.avg_fitness }});
+{% endfor %}
+
+  var data = [
+    {
+      x: xdata,
+      y: ydata,
+      type: 'bar',
+    }
+  ];
+
+  Plotly.newPlot('gen-graph', data);
+</script>
+
 {% endblock %}

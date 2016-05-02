@@ -89,6 +89,8 @@ def species(request, spec_pk):
             'spec': spec,
             'fields': spec.get_concrete_fields(('id')),
             'org_list': spec.organisms(),
+            'org_fitness': spec.organism_fitness(),
+            'gen_fitness': spec.generation_fitness(),
     }
 
     return render(request, 'neatweb/species.html', context)
