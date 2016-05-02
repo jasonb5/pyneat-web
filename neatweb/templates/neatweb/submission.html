@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="{% url 'submission' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_ul }}
-    <input type="submit" value="Submit">
+<form class="ink-form" action="{% url 'submission' %}" method="post">
+  {% csrf_token %}
+{% for field in form %}
+  <div class="control-group">
+    {{ field.label_tag }}
+    <div class="control">
+      {{ field }}
+    </div>
+  </div> 
+{% endfor %}
+  <input type="submit" value="Submit">
 </form>
 {% endblock %}

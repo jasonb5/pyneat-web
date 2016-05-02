@@ -7,12 +7,30 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/vis/4.16.0/vis.min.js"></script>
     <script src="//cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="{% static 'neatweb/neat-ajax.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'neatweb/neat.css' %}"></script>
+    <link rel="stylesheet" type="text/css" href="//fastly.ink.sapo.pt/3.1.10/css/ink.css">
+    <script src="//fastly.ink.sapo.pt/3.1.10/js/ink-all.js"></script>
     <title>{% block title %}pyNEAT{% endblock %}</title>
   </head>
 
   <body>
-    <div id="content">
-      {% block content %}{% endblock %}
+    <div id="topbar">
+      <nav class="ink-navigation">
+        <ul class="breadcrumbs black push-left">
+          <li><a href="{% url 'home' %}">Home</a></li>
+          {% block breadcrumbs %}{% endblock %}
+        </ul>
+        <ul class="menu horizontal black push-right">
+          <li><a href="{% url 'submission' %}">Submission</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div id="content" class="ink-grid">
+      <div class="column-group">
+        <div class="all-100">
+          {% block content %}{% endblock %}
+        </div>
+      </div>
     </div>
   </body>
 </html>

@@ -1,28 +1,31 @@
 {% extends "base.html" %}
 
+{% block breadcrumbs %}
+<li class="active"><a href="{% url 'experiment' exp.pk %}">Experiment</a></li>
+{% endblock %}
+
 {% block content %}
+<div class="column-group top-space">
+  <div class="all-100">
+    <form id="population-form" action="" method="post">
+      {% csrf_token %}
+      <select id="population-sel">
+      {% for pop in pop_list %}
+        <option value="{{ pop.pk }}">Population {{ pop.rel_index }}</option>
+      {% endfor %}
+      </select>
+      <input type="submit" value="Select" />
+    </form>
 
-<ul>
-  <li><a href="{% url 'home' %}">Home</a></li>
-</ul>
-
-<form id="population-form" action="" method="post">
-  {% csrf_token %}
-  <select id="population-sel">
-  {% for pop in pop_list %}
-    <option value="{{ pop.pk }}">Population {{ pop.rel_index }}</option>
-  {% endfor %}
-  </select>
-  <input type="submit" value="Select" />
-</form>
-
-<table border="1">
-{% for key, value in exp_config.items %}
-  <tr>
-    <td>{{ key }}</td>
-    <td>{{ value }}</td>
-  </tr>
-{% endfor %}
-</table>
+    <table class="ink-table bordered">
+    {% for key, value in exp_config.items %}
+      <tr>
+        <td>{{ key }}</td>
+        <td>{{ value|linebreaks }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+</div>
 
 {% endblock %}

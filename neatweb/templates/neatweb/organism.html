@@ -1,24 +1,44 @@
 {% extends "base.html" %}
 
+{% block breadcrumbs %}
+<li>
+  <a href="{% url 'experiment' org.population.experiment.pk %}">Experiment</a>
+</li>
+<li>
+  <a href="{% url 'population' org.population.pk %}">Population</a>
+</li>
+<li>
+  <a href="{% url 'generation' org.generation.pk %}">Generation</a>
+</li>
+<li>
+  <a href="{% url 'species' org.species.pk %}">Species</a>
+</li>
+<li class="active">
+  <a href="{% url 'organism' org.pk %}">Organism</a>
+</li>
+{% endblock %}
+
 {% block content %}
-
-<ul>
-  <li><a href="{% url 'population' org.population.pk %}">Population {{ org.population.rel_index }}</a></li>
-  <li><a href="{% url 'generation' org.generation.pk %}">Generation {{ org.generation.rel_index }}</a></li>
-  <li><a href="{% url 'species' org.species.pk %}">Species {{ org.species.rel_index }}</a></li>
-</ul>
-<table border="1">
-{% for k, v in fields.items %}
-  <tr>
-    <td>{{ k }}</td>
-    <td>{{ v }}</td>
-  </tr>
-{% endfor %}
-</table>
-
-<div id="neural-network"></div>
-
-<div id="spec-graph"></div>
+<div class="column-group">
+  <div class="all-100">
+    <table class="ink-table bordered">
+    {% for k, v in fields.items %}
+      <tr>
+        <td>{{ k }}</td>
+        <td>{{ v }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+</div>
+<div class="column-group">
+  <div class="all-50 medium-100">
+    <div id="neural-network"></div>
+  </div>
+  <div class="all-50 medium-100">
+    <div id="spec-graph"></div>
+  </div>
+</div>
 
 <script type="text/javascript">
   var nodes = new vis.DataSet();

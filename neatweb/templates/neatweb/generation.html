@@ -1,24 +1,39 @@
 {% extends "base.html" %}
 
+{% block breadcrumbs %}
+<li>
+  <a href="{% url 'experiment' gen.population.experiment.pk %}">Experiment</a>
+</li>
+<li>
+  <a href="{% url 'population' gen.population.pk %}">Population</a>
+</li>
+<li class="active">
+  <a href="{% url 'generation' gen.pk %}">Generation</a>
+</li>
+{% endblock %}
+
 {% block content %}
-
-<ul>
-  <li><a href="{% url 'population' gen.population.pk %}">Population {{ gen.population.rel_index }}</a></li>
-</ul>
-
-<form id="species-form" action="" method="post">
-  {% csrf_token %}
-  <select id="species-sel">
-  {% for spec in spec_list %}
-  <option value="{{ spec.pk }}">Species {{ spec.rel_index }}</option>
-  {% endfor %}
-  </select>
-  <input type="submit" value="Select" />
-</form>
-
-<div id="spec-graph"></div>
-
-<div id="org-graph"></div>
+<div class="column-group">
+  <div class="all-100">
+    <form id="species-form" action="" method="post">
+      {% csrf_token %}
+      <select id="species-sel">
+      {% for spec in spec_list %}
+      <option value="{{ spec.pk }}">Species {{ spec.rel_index }}</option>
+      {% endfor %}
+      </select>
+      <input type="submit" value="Select" />
+    </form>
+  </div>
+</div>
+<div class="column-group">
+  <div class="all-50 medium-100">
+    <div id="spec-graph"></div>
+  </div>
+  <div class="all-50 medium-100">
+    <div id="org-graph"></div>
+  </div>
+</div>
 
 <script type="text/javascript">
   var xdata = [];

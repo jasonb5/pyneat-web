@@ -1,33 +1,51 @@
 {% extends "base.html" %}
 
+{% block breadcrumbs %}
+<li>
+  <a href="{% url 'experiment' spec.population.experiment.pk %}">Experiment</a>
+</li>
+<li>
+  <a href="{% url 'population' spec.population.pk %}">Population</a>
+</li>
+<li>
+  <a href="{% url 'generation' spec.generation.pk %}">Generation</a>
+</li>
+<li class="active">
+  <a href="{% url 'species' spec.pk %}">Species</a>
+</li>
+{% endblock %}
+
 {% block content %}
+<div class="column-group">
+  <div class="all-100">
+    <form id="organism-form" action="" method="post">
+      {% csrf_token %}
+      <select id="organism-sel">
+      {% for org in org_list %}
+        <option value="{{ org.pk }}">Organism {{ org.rel_index }}</option>
+      {% endfor %}
+      </select>
+      <input type="submit" value="Select" />
+    </form>
 
-<ul>
-  <li><a href="{% url 'population' spec.population.pk %}">Population {{ spec.population.rel_index }}</a></li>
-  <li><a href="{% url 'generation' spec.generation.pk %}">Generation {{ spec.generation.rel_index }}</a></li>
-</ul>
-<form id="organism-form" action="" method="post">
-  {% csrf_token %}
-  <select id="organism-sel">
-  {% for org in org_list %}
-    <option value="{{ org.pk }}">Organism {{ org.rel_index }}</option>
-  {% endfor %}
-  </select>
-  <input type="submit" value="Select" />
-</form>
-
-<table border="1">
-{% for k, v in fields.items %}
-  <tr>
-    <td>{{ k }}</td>
-    <td>{{ v }}</td>
-  </tr>
-{% endfor %}
-</table>
-
-<div id="org-graph"></div>
-
-<div id="gen-graph"></div>
+    <table border="1">
+    {% for k, v in fields.items %}
+      <tr>
+        <td>{{ k }}</td>
+        <td>{{ v }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+</div>
+<div class="column-group">
+  <div class="all-50 medium-100">
+    <div id="org-graph"></div>
+  </div>
+  <div class="all-50 medium-100">
+    <div id="gen-graph"></div>
+  </div>
+</div>
 
 <script type="text/javascript">
   var xdata = [];
