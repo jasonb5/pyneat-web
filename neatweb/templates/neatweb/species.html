@@ -72,7 +72,7 @@
   var ydata = [];
 
 {% for gen in gen_fitness %}
-  xdata.push({{ gen.generation }});
+  xdata.push({{ gen.generation__rel_index }});
   ydata.push({{ gen.avg_fitness }});
 {% endfor %}
 

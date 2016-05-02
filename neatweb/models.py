@@ -86,9 +86,11 @@ class Species(models.Model):
                 species=self.pk).values('rel_index', 'fitness')
 
     def generation_fitness(self):
-        return Species.objects.filter(
-                population=self.population,
-                rel_index=self.rel_index).values('generation', 'avg_fitness')
+        return Species.objects.select_related(
+                'generation').filter(
+                        population=self.population,
+                        rel_index=self.rel_index).values(
+                                'generation__rel_index', 'avg_fitness')
 
     def get_concrete_fields(self, exclude=()):
         return dict([(f.name, f.value_from_object(self)) for f in Species._meta.get_fields() 
