@@ -60,7 +60,6 @@
   edges.add({
     from: {{ g.inode }}, 
     to: {{ g.onode }},
-    arrows: 'to',
     label: '{{ g.weight }}',
     font: {
       align: 'top',
@@ -74,14 +73,24 @@
     edges: edges,
   };
   var options = {
-    width: '600px',
-    height: '400px',  
+    autoResize: true,
+    height: 400,
+    edges: {
+      arrows: 'to',
+      smooth: {
+        type: 'discrete',
+        roundness: 0.8,
+      },
+    },
     layout: {
       hierarchical: {
+        levelSeparation: 200,
+        nodeSpacing: 250,
+        blockShifting: true,
+        edgeMinimization: true,
         direction: 'LR',
-        levelSeparation: 300,
-        nodeSpacing: 300,
-      }
+        sortMethod: 'directed',
+      },
     },
   };
   var network = new vis.Network(container, data, options);
