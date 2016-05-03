@@ -6,6 +6,37 @@ $(document).ready(function () {
     },
   });
 
+  function update_status () {
+    $.get('/neat/progress', function (data) {
+      var json = $.parseJSON(data);
+
+      json.forEach(function (v, i) {
+        var endCol = $('#'+v.jid);
+
+        if (v.progress > "0" && v.progress < "100") {
+          if ($('#progress-'+v.jid).length) {
+            var progressBar = new ProgressBar('#progress-'+v.jid);
+            progressBar.setValue(v.progress);
+          } else {
+            endCol.attr('data-progress', 'progress');
+            endCol.html('<div id="progress-'+v.jid+'" class="ink-progress-bar grey" data-start-value="1"><span class="caption">Progress</span><div class="bar grey"></div></div>');
+          }
+        } else if (v.progress > "200") {
+          if (endCol.attr('data-progress') {
+            endCol.removeAttr('data-progress');
+            endCol.html(v.end);
+          }
+        }
+      });
+    }); 
+  }
+
+  if ($(location).attr('pathname') === '/neat/') {
+    setInterval(update_status, 1000);
+  } else {
+    clearInterval(update_status);
+  }
+
   $('#population-form').ready(function () {
     $('#population-form').updateAction('#population-sel option:selected', '/neat/population/');
   });

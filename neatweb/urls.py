@@ -11,4 +11,6 @@ urlpatterns = [
     url(r'^organism/(?P<org_pk>\d+)/$', views.organism, name='organism'),
 
     url(r'^submission/$', views.submission, name='submission'),
+
+    url(r'^progress/$', views.query_progress, name='progress'),
 ]

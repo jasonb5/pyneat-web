@@ -10,6 +10,8 @@ django.setup()
 from . import models
 
 from redis import Redis
+
+from rq import Queue
 from rq import get_current_job
 
 import json
@@ -26,19 +28,29 @@ class NeatObserver(DataObserver):
         self.exp = None
         self.pop = None
 
+    def progress(self, progress, message):
+        self.exp.progress = progress
+        self.exp.message = message
+        self.exp.save()
+
     def experiment(self, name, conf, dt):
         job = get_current_job(connection=Redis(host='redis', port=6379))
 
         self.exp = models.Experiment(
                 name = name,
                 jid = job.id,
+                progress=0,
+                message="",
                 start = dt,
                 config = json.dumps(conf.__dict__, default=default_serializer))
 
         self.exp.save()
 
     def experiment_end(self, dt):
-        models.Experiment.objects.filter(pk=self.exp.pk).update(end=dt)
+        self.exp.end = dt
+        self.exp.progress = 200
+        self.exp.message = ""
+        self.exp.save()
 
     def population(self, pop_index):
         self.pop = models.Population(

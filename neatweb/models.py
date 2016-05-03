@@ -10,6 +10,8 @@ from django.db.models.fields import FloatField
 class Experiment(models.Model):
     name = models.CharField(max_length=64)
     jid = models.CharField(max_length=37)
+    progress = models.DecimalField(max_digits=5, decimal_places=2)
+    message = models.CharField(max_length=256, null=True)
     start = models.DateTimeField()
     end = models.DateTimeField(null=True)
     config = models.TextField()

@@ -14,6 +14,21 @@ from redis import Redis
 
 import json
 import decimal
+import datetime
+
+def default_serializer(o):
+    if isinstance(o, decimal.Decimal):
+        return str(o)
+    elif isinstance(o, datetime.datetime):
+        return o.strftime('%B %w, %Y, %I:%M %p') 
+
+    return None
+
+def query_progress(request):
+    data = models.Experiment.objects.all().values(
+            'jid', 'progress', 'message', 'end')
+
+    return HttpResponse(json.dumps(list(data), default=default_serializer))
 
 def submission(request):
     if request.method == 'POST':
