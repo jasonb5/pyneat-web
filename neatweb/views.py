@@ -20,7 +20,7 @@ def default_serializer(o):
     if isinstance(o, decimal.Decimal):
         return str(o)
     elif isinstance(o, datetime.datetime):
-        return o.strftime('%B %w, %Y, %I:%M %p') 
+        return o.strftime('%B %d, %Y, %I:%M %p') 
 
     return None
 

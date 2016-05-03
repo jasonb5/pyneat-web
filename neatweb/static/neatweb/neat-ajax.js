@@ -12,17 +12,23 @@ $(document).ready(function () {
 
       json.forEach(function (v, i) {
         var endCol = $('#'+v.jid);
+        var progress = parseInt(v.progress);
 
-        if (v.progress > "0" && v.progress < "100") {
+        if (progress > 0 && progress < 100) {
           if ($('#progress-'+v.jid).length) {
-            var progressBar = new ProgressBar('#progress-'+v.jid);
-            progressBar.setValue(v.progress);
-          } else {
+            Ink.requireModules(['Ink.UI.ProgressBar_1'], function (ProgressBar) {
+              var progressBar = new ProgressBar('#progress-'+v.jid);
+              progressBar.setValue(progress);
+            });
+          } else{
             endCol.attr('data-progress', 'progress');
-            endCol.html('<div id="progress-'+v.jid+'" class="ink-progress-bar grey" data-start-value="1"><span class="caption">Progress</span><div class="bar grey"></div></div>');
+            endCol.html("<div id=\"progress-"+v.jid+"\" \
+                class=\"ink-progress-bar grey\" \
+                data-start-value=\""+progress+"\"><span class=\"caption\"> \
+                Progress</span><div class=\"bar grey\"></div></div>");
           }
-        } else if (v.progress > "200") {
-          if (endCol.attr('data-progress') {
+        } else if (progress == 200) {
+          if (endCol.attr('data-progress') != 'undefined') {
             endCol.removeAttr('data-progress');
             endCol.html(v.end);
           }
@@ -32,6 +38,7 @@ $(document).ready(function () {
   }
 
   if ($(location).attr('pathname') === '/neat/') {
+    update_status();
     setInterval(update_status, 1000);
   } else {
     clearInterval(update_status);

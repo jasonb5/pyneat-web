@@ -15,8 +15,8 @@
       {% for exp in exp_list %}
         <tr>
           <td>{{ exp.name }}</td>
-          <td>{{ exp.start }}</td>
-          <td id="{{ exp.jid }}">{{ exp.end }}</td>
+          <td>{{ exp.start|date:"F d, Y, h:i A" }}</td>
+          <td id="{{ exp.jid }}">{{ exp.end|date:"F d, Y, h:i A" }}</td>
           <td>
             <form action="{% url 'experiment' exp.pk %}" method="post">
               {% csrf_token %}
