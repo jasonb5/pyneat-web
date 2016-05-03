@@ -9,3 +9,7 @@
 #content {
     padding-top: 3em;
 }
+
+#org-table {
+    transform: translateY(50%);
+}

@@ -21,24 +21,23 @@
 {% endblock %}
 
 {% block content %}
-<div class="column-group">
-  <div class="all-100">
-    <table class="ink-table bordered">
+<div class="column-group gutters">
+  <div class="all-25">
+    <table id="org-table" class="ink-table bordered">
     {% for k, v in fields.items %}
       <tr>
         <td>{{ k }}</td>
+      {% if k == 'fitness' %}
+        <td>{{ v|floatformat:2 }}</td>
+      {% else %}
         <td>{{ v }}</td>
+      {% endif %}
       </tr>
     {% endfor %}
     </table>
   </div>
-</div>
-<div class="column-group">
-  <div class="all-50 medium-100">
+  <div class="all-75">
     <div id="neural-network"></div>
-  </div>
-  <div class="all-50 medium-100">
-    <div id="spec-graph"></div>
   </div>
 </div>
 
@@ -93,25 +92,8 @@
       },
     },
   };
+
   var network = new vis.Network(container, data, options);
-
-  var xdata = [];
-  var ydata = [];
-
-{% for spec in spec_fitness %}
-  xdata.push({{ spec.rel_index }});
-  ydata.push({{ spec.fitness }});
-{% endfor %}
-
-  var data = [
-    {
-      x: xdata,
-      y: ydata,
-      type: 'bar',
-    }
-  ];
-
-  Plotly.newPlot('spec-graph', data);
 </script>
 
 {% endblock %}

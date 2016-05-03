@@ -110,11 +110,6 @@ class Organism(models.Model):
     population = models.ForeignKey(Population, on_delete=models.CASCADE)
     generation = models.ForeignKey(Generation, on_delete=models.CASCADE)
 
-    def species_fitness(self):
-        return Organism.objects.select_related(
-                'species').get(
-                        pk=self.pk).species.organisms
-
     def get_concrete_fields(self, exclude=()):
         return dict([(f.name, f.value_from_object(self)) for f in Organism._meta.get_fields() 
                 if not (f.is_relation or 
