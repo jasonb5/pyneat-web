@@ -5,6 +5,7 @@ from django.forms.models import model_to_dict
 
 from . import models
 from .forms import ExperimentForm
+from .forms import FieldSet
 from .pyneatwrapper import pyneat_wrapper
 
 from pyneat import Conf
@@ -55,8 +56,34 @@ def submission(request):
 
         form = ExperimentForm(initial)
 
+    fieldsets = (
+        FieldSet(form, ('name',), 'General'),
+        FieldSet(form, (
+            'num_input',
+            'num_output',
+            'fitness_func'), 'Network'),
+        FieldSet(form, (
+            'runs', 
+            'pop_size', 
+            'generations',
+            'survival_rate',
+            'stagnation_threshold',
+            'allow_recurrent'), 'NEAT Parameters'),
+        FieldSet(form, (
+            'coef_matching', 
+            'coef_disjoint', 
+            'compat_threshold'), 'Genome Matching Parameters'),
+        FieldSet(form, (
+            'mate_only_prob', 
+            'mutate_only_prob', 
+            'mutate_neuron_prob',
+            'mutate_gene_prob',
+            'mutate_power'), 'Mutation Parameters')
+    )
+
     context = {
             'form': form,
+            'fieldsets': fieldsets,
     }
 
     return render(request, 'neatweb/submission.html', context)

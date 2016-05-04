@@ -1,4 +1,15 @@
 from django import forms
+from django.forms.boundfield import BoundField
+
+class FieldSet(object):
+    def __init__(self, form, fields, legend):
+        self.form = form
+        self.fields = fields
+        self.legend = legend
+
+    def __iter__(self):
+        for name in self.fields:
+            yield BoundField(self.form, self.form.fields[name], name)
 
 class ExperimentForm(forms.Form):
     name = forms.CharField()
