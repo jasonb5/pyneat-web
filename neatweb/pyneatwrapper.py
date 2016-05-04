@@ -119,8 +119,13 @@ class NeatObserver(DataObserver):
 
 def pyneat_wrapper(conf):
     logger = DataLogger()
-    logger.add_observer(NeatObserver())
+    neat_obs = NeatObserver()
+    logger.add_observer(neat_obs)
 
-    exp = Experiment()
-
-    exp.run(conf.name, conf, logger)
+    try:
+        exp = Experiment()
+        exp.run(conf.name, conf, logger)
+    except Exception as e:
+        neat_obs.exp.progress = 200
+        neat_obs.exp.message = e.message
+        neat_obs.save()
