@@ -3,15 +3,16 @@
 {% block content %}
 <form class="ink-form" action="{% url 'submission' %}" method="post">
   {% csrf_token %}
+  {{ form.media }}
 {% for set in fieldsets %}
   <fieldset>
     <legend>{{ set.legend }}</legend>
     <div class="column-group quarter-gutters">
     {% for field in set %}
     {% if field.id_for_label == 'id_fitness_func' %}
-      <div class="control-group all-100">
+      <div class="control-group tiny-100 small-100 medium-100 large-60 xlarge-60">
     {% else %}
-      <div class="control-group all-25">
+      <div class="control-group all-20">
     {% endif %}
         {{ field.label_tag }}
         <div class="control">

@@ -1,6 +1,8 @@
 from django import forms
 from django.forms.boundfield import BoundField
 
+from django_ace import AceWidget
+
 class FieldSet(object):
     def __init__(self, form, fields, legend):
         self.form = form
@@ -25,7 +27,7 @@ class ExperimentForm(forms.Form):
     mutate_neuron_prob = forms.DecimalField()
     mutate_gene_prob = forms.DecimalField()
     mutate_power = forms.DecimalField()
-    fitness_func = forms.CharField(widget=forms.Textarea)
+    fitness_func = forms.CharField(widget=AceWidget(mode='python', width='800px', height='400px'))
     num_input = forms.IntegerField()
     num_output = forms.IntegerField()
     runs = forms.IntegerField()
