@@ -78,7 +78,8 @@ def submission(request):
             'mutate_only_prob', 
             'mutate_neuron_prob',
             'mutate_gene_prob',
-            'mutate_power'), 'Mutation Parameters')
+            'mutate_power',
+            'clamp_weights'), 'Mutation Parameters')
     )
 
     context = {
@@ -174,7 +175,7 @@ def experiment(request, exp_pk):
     return render(request, 'neatweb/experiment.html', context)
 
 def home(request):
-    exp_list = models.Experiment.objects.all()
+    exp_list = models.Experiment.objects.all().order_by('-start')
 
     context = {
             'exp_list': exp_list,

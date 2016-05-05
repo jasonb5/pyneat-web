@@ -29,4 +29,5 @@ class ExperimentForm(forms.Form):
     num_input = forms.IntegerField()
     num_output = forms.IntegerField()
     runs = forms.IntegerField()
+    clamp_weights = forms.DecimalField()
     allow_recurrent = forms.BooleanField(required=False)
