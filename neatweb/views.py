@@ -14,8 +14,38 @@ from rq import Queue
 from redis import Redis
 
 import json
+import math
 import decimal
 import datetime
+
+def query_simualte_fitness_func(request):
+    class FakeNet:
+        def __init__(self, data):
+            for i in xrange(len(data)):
+                if len(data[i]) > 1:
+                    data[i] = map(lambda x: float(x), data[i])
+                else:
+                    data[i] = map(lambda x: float(x), data[i])[0]
+
+            self.idx = 0
+            self.test_data = data
+
+        def activate(self, data):
+            idx = self.idx
+            self.idx += 1
+
+            return self.test_data[idx]
+
+    func = request.GET['func']
+    data = json.loads(request.GET['data'])
+
+    ns = { 'math': math }
+
+    exec func in ns
+
+    fitness, winner = ns['evaluate'](FakeNet(data))
+
+    return HttpResponse(json.dumps({ 'winner': winner, 'fitness': fitness }))
 
 def default_serializer(o):
     if isinstance(o, decimal.Decimal):

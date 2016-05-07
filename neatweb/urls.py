@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^submission/$', views.submission, name='submission'),
 
     url(r'^progress/$', views.query_progress, name='progress'),
+    url(r'^simulate/fitness/$', views.query_simualte_fitness_func, name='sim_fitness'),
 ]

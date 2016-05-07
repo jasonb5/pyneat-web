@@ -18,6 +18,10 @@
         <div class="control">
           {{ field }}
         </div>
+      {% if field.id_for_label == 'id_fitness_func' %}
+        <button id="network-modal-trigger" class="ink-button push-right">Test</button>
+        {% include 'neatweb/modal.html' with form=form %}
+      {% endif %}
       </div>
     {% endfor %}
     </div>

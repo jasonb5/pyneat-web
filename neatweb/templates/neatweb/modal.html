@@ -1,0 +1,38 @@
+<div class="ink-shade fade">
+  <div id="network-modal" class="ink-modal fade" data-trigger="#network-modal-trigger" data-width="80%" data-height="80%" role="dialog" aria-hidden="true" aria-labelled-by="modal-title">
+    <div class="modal-header">
+      <button class="modal-close ink-dismiss"></button>
+      <h2 id="modal-title">Fitness Function Tester</h2>
+    </div>
+    <div class="modal-body" id="modal-content">
+      <div class="ink-grid">
+        <div id="data" class="column-group all-50">&nbsp;</div>
+        <div class="column-group all-50">
+          <div class="column-group all-100 bottom-space">
+            <button id="add-data" class="ink-button" type="button">Add</button>
+            <button id="test-data" class="ink-button" type="button">Test</button>
+          </div>
+          <div class="column-group all-100">
+            <strong>Winner</strong>
+            <div id="winner">&nbsp;</div>
+          </div>
+          <div class="column-group all-100">
+            <strong>Fitness</strong>
+            <div id="fitness">&nbsp;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="push-right">
+        <button class="ink-button caution ink-dismiss">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  Ink.requireModules(['Ink.Dom.Selector_1', 'Ink.UI.Modal_1'], function (Selector, Modal) {
+    var modalElement = Ink.s('#network-modal');
+    var modalObj = new Modal(modalElement);
+  });
+</script>

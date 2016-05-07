@@ -44,6 +44,58 @@ $(document).ready(function () {
     clearInterval(update_status);
   }
 
+  $('#test-data').click(function () {
+    var data = [];
+
+    $('#data').children().each(function (i) {
+      var test = [];
+
+      $(this).children('#output').each(function (j) {
+        var id = $(this).attr('data-id');
+        test[id] = $(this).val();
+      });
+
+      data.push(test);
+    });
+
+    $.get('/neat/simulate/fitness', 
+        { func: $('#id_fitness_func').val(), data: JSON.stringify(data) }, 
+        function (data) {
+          var json = $.parseJSON(data);
+          $('#fitness').html(json.fitness);
+          $('#winner').html(Boolean(json.winner));
+        }
+    );
+  });
+
+  $('#add-data').click(function () {
+    var num_output = $('#id_num_output').val();
+    var data_div = $('#data');
+
+    var test_div = $('<div>', { id: 'test' });
+
+    test_div.append($('<strong>', { text: 'Output' }));
+    test_div.append($('<br>'));
+
+    for (i = 0; i < num_output; ++i) {
+      test_div.append($('<input>', { id: 'output', 'data-id': i, type: 'number', value: 0 }));
+    }
+
+    test_div.append($('<a>', 
+          { 
+            'data-id': i, 
+            text: 'x', 
+            class: 'left-space', 
+            type: 'button', 
+            click: function () {
+              $(this).parent().remove();
+            },
+          }));
+    test_div.append($('<hr>', { class: 'right-space' }));
+
+    data_div.prepend(test_div); 
+  });
+
   $('#population-form').ready(function () {
     $('#population-form').updateAction('#population-sel option:selected', '/neat/population/');
   });
