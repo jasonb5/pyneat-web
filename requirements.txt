@@ -1,4 +1,5 @@
 django
+django-ace
 psycopg2
 rq
 git+git://github.com/jasonb5/pyneat.git#egg=pyneat
