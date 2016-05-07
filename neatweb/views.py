@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
@@ -125,33 +126,39 @@ def organism(request, org_pk):
     valid_fields = org.get_concrete_fields(('id'))
     network = json.loads(valid_fields.pop('network'))
 
-    level = 0
-    inodes = [(i, level) for i in xrange(network['input'])]
+    neuron_map = {}
 
-    # Adds some psuedo level separation, TODO level needs to 
-    # be dependent on links coming in.
-    hnodes = []
-    for i in xrange(network['hidden']):
-        idx = network['input']+i
-        if idx % network['input'] == 0:
-            level += 1
+    for gene in network['genes']:
+        inode = gene['inode']
+        onode = gene['onode']
 
-        hnodes.append((idx, level))
+        if not inode in neuron_map:
+            neuron_map[inode] = True
 
-    level += 1
-    onodes = [(1000+i, level) for i in xrange(network['output'])]
+        if not onode in neuron_map:
+            neuron_map[onode] = True
 
-    neurons = {
-            'input': inodes,
-            'hidden': hnodes,
-            'output': onodes,
-    }
+    neuron_keys = neuron_map.keys()
+
+    neurons = map(lambda x: neuron_keys.index(x), neuron_keys)
+
+    genes = []
+
+    for gene in network['genes']:
+        new_gene = {
+            'inode': neuron_keys.index(gene['inode']),
+            'onode': neuron_keys.index(gene['onode']),
+            'weight': gene['weight'],
+            'enabled': gene['enabled'],
+        }
+
+        genes.append(new_gene)
      
     context = {
             'org': org,
             'fields': valid_fields,
             'neurons': neurons,
-            'genes': network['genes'],
+            'genes': genes,
     }
 
     return render(request, 'neatweb/organism.html', context)

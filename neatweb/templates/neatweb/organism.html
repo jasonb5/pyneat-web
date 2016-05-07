@@ -37,63 +37,89 @@
     </table>
   </div>
   <div class="all-75">
-    <div id="neural-network"></div>
+    <div id="network"></div>
   </div>
 </div>
 
+<style charset="utf-8">
+circle {
+  fill: #ccc;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+</style>
+
 <script type="text/javascript">
-  var nodes = new vis.DataSet();
-  var edges = new vis.DataSet();
+var nodes = [];
+var links = [];
 
-{% for k, v in neurons.items %}
-  {% for n in v %}
-  nodes.add({
-    id: {{ n.0 }},
-    label: '{{ k }} {{ n.0 }}',
-    level: {{ n.1 }},
-  });
-  {% endfor %}
+{% for node in neurons %}
+nodes.push({ name: {{ node }} });
 {% endfor %}
 
-{% for g in genes %}
-  edges.add({
-    from: {{ g.inode }}, 
-    to: {{ g.onode }},
-    label: '{{ g.weight }}',
-    font: {
-      align: 'top',
-    },
-  });
+{% for gene in genes %}
+links.push({ source: {{ gene.inode }}, target: {{ gene.onode }} });
 {% endfor %}
 
-  var container = document.getElementById('neural-network');
-  var data = {
-    nodes: nodes,
-    edges: edges,
-  };
-  var options = {
-    autoResize: true,
-    height: 400,
-    edges: {
-      arrows: 'to',
-      smooth: {
-        type: 'discrete',
-        roundness: 0.8,
-      },
-    },
-    layout: {
-      hierarchical: {
-        levelSeparation: 200,
-        nodeSpacing: 250,
-        blockShifting: true,
-        edgeMinimization: true,
-        direction: 'LR',
-        sortMethod: 'directed',
-      },
-    },
-  };
+var width = 600,
+    height = 400;
 
-  var network = new vis.Network(container, data, options);
+var force = d3.layout.force()
+  .nodes(nodes)
+  .links(links)
+  .size([width, height])
+  .charge(-400)
+  .linkDistance(40)
+  .on('tick', tick)
+  .start();
+
+var svg = d3.select('#network').append('svg')
+  .attr('width', width)
+  .attr('height', height);
+
+svg.append('defs').selectAll('marker')
+  .data(['to',])
+  .enter().append('marker')
+  .attr('id', function(d) { return d; })
+  .attr('viewBox', '0 -5 10 10')
+  .attr('refX', 15)
+  .attr('refY', -1.5)
+  .attr('markerWidth', 6)
+  .attr('markerHeight', 6)
+  .attr('orient', 'auto')
+  .append('path')
+  .attr('d', 'M0,-5L10,0L0,5');
+
+var path = svg.append('g').selectAll('path')
+  .data(force.links())
+  .enter().append('path')
+  .attr('class', function(d) { return 'link'; })
+  .attr('marker-end', function(d) { return 'url(#to)'; });
+
+var circle = svg.append('g').selectAll('circle')
+  .data(force.nodes())
+  .enter().append('circle')
+  .attr('r', 6)
+  .call(force.drag);
+
+function tick() {
+  path.attr('d', link);
+  circle.attr('transform', transform);
+}
+
+function link(d) {
+  return 'M' + d.source.x + ',' + d.source.y + 'L' + d.target.x + ',' + d.target.y;
+}
+
+function transform(d) {
+  return 'translate(' + d.x + ',' + d.y + ')';
+}
 </script>
 
 {% endblock %}
