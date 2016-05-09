@@ -126,39 +126,34 @@ def organism(request, org_pk):
     valid_fields = org.get_concrete_fields(('id'))
     network = json.loads(valid_fields.pop('network'))
 
-    neuron_map = {}
+    nodes = {}
+    links = []
+    group = 0
+    names = ['Input', 'Hidden', 'Output']
+    offset = [0, network['input'], 1000]
 
-    for gene in network['genes']:
-        inode = gene['inode']
-        onode = gene['onode']
+    for i in zip(offset, [network['input'], network['hidden'], network['output']]):
+        for j in xrange(i[1]):
+            nodes[i[0]+j] = { 'label': names[group] + str(i[0]+j), 'group': group } 
+        group += 1
 
-        if not inode in neuron_map:
-            neuron_map[inode] = True
-
-        if not onode in neuron_map:
-            neuron_map[onode] = True
-
-    neuron_keys = neuron_map.keys()
-
-    neurons = map(lambda x: neuron_keys.index(x), neuron_keys)
-
-    genes = []
-
-    for gene in network['genes']:
-        new_gene = {
-            'inode': neuron_keys.index(gene['inode']),
-            'onode': neuron_keys.index(gene['onode']),
-            'weight': gene['weight'],
-            'enabled': gene['enabled'],
+    for g in network['genes']:
+        link = {
+            'source': nodes.keys().index(g['inode']),
+            'target': nodes.keys().index(g['onode']),
+            'weight': g['weight'],
+            'enabled': g['enabled'],
         }
 
-        genes.append(new_gene)
+        links.append(link)
+
+    nodes = map(lambda x: { 'name': nodes.keys().index(x[0]), 'group': x[1]['group'], 'label': x[1]['label'] }, nodes.items())
      
     context = {
             'org': org,
             'fields': valid_fields,
-            'neurons': neurons,
-            'genes': genes,
+            'nodes': json.dumps(nodes),
+            'links': json.dumps(links),
     }
 
     return render(request, 'neatweb/organism.html', context)

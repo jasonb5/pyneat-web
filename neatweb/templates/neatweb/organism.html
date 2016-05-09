@@ -42,83 +42,82 @@
 </div>
 
 <style charset="utf-8">
-circle {
-  fill: #ccc;
-  stroke: #333;
-  stroke-width: 1.5px;
+.link {
+  fill: #000;
+  stroke: #ccc;
+  stroke-width: '1.5px';
 }
 
-.link {
-  fill: none;
-  stroke: #666;
-  stroke-width: 1.5px;
+text {
+  fill: #000;
+  font: 10px sans-serif;
+  pointer-events: none;
 }
 </style>
 
 <script type="text/javascript">
-var nodes = [];
-var links = [];
-
-{% for node in neurons %}
-nodes.push({ name: {{ node }} });
-{% endfor %}
-
-{% for gene in genes %}
-links.push({ source: {{ gene.inode }}, target: {{ gene.onode }} });
-{% endfor %}
-
 var width = 600,
     height = 400;
 
+var nodes = {{ nodes|safe }};
+var links = {{ links|safe }};
+
+var fill = d3.scale.category10();
+
 var force = d3.layout.force()
-  .nodes(nodes)
-  .links(links)
-  .size([width, height])
-  .charge(-400)
-  .linkDistance(40)
-  .on('tick', tick)
-  .start();
+    .nodes(nodes)
+    .links(links)
+    .charge(-200)
+    .linkDistance(120)
+    .size([width, height])
+    .on('tick', tick)
+    .start();
 
 var svg = d3.select('#network').append('svg')
-  .attr('width', width)
-  .attr('height', height);
+    .attr('width', width)
+    .attr('height', height);
 
 svg.append('defs').selectAll('marker')
-  .data(['to',])
+    .data(['to'])
   .enter().append('marker')
-  .attr('id', function(d) { return d; })
-  .attr('viewBox', '0 -5 10 10')
-  .attr('refX', 15)
-  .attr('refY', -1.5)
-  .attr('markerWidth', 6)
-  .attr('markerHeight', 6)
-  .attr('orient', 'auto')
+    .attr('id', 'to')
+    .attr('viewBox', '0 -5 10 10')
+    .attr('refX', 16)
+    .attr('refY', 0)
+    .attr('markerWidth', 10)
+    .attr('markerHeight', 10)
+    .attr('orient', 'auto')
   .append('path')
-  .attr('d', 'M0,-5L10,0L0,5');
+    .attr('d', 'M0,-5L10,0L0,5');
 
-var path = svg.append('g').selectAll('path')
-  .data(force.links())
+var genes = svg.selectAll('path')
+    .data(links)
   .enter().append('path')
-  .attr('class', function(d) { return 'link'; })
-  .attr('marker-end', function(d) { return 'url(#to)'; });
+    .attr('class', 'link')
+    .attr('marker-end', 'url(#to)');
 
-var circle = svg.append('g').selectAll('circle')
-  .data(force.nodes())
-  .enter().append('circle')
-  .attr('r', 6)
-  .call(force.drag);
+var neurons = svg.selectAll('g')
+    .data(nodes)
+  .enter().append('g');
+
+neurons.append('circle')
+    .attr('r', 8)
+    .attr('fill', function(d) { return fill(d.group); })
+    .call(force.drag);
+
+neurons.append('text')
+    .attr('dx', 10)
+    .attr('dy', 5)
+    .text(function(d) { return d.label; });
 
 function tick() {
-  path.attr('d', link);
-  circle.attr('transform', transform);
-}
+  neurons.attr('transform', function(d) {
+    return 'translate(' + d.x + ',' + d.y + ')';
+  });
 
-function link(d) {
-  return 'M' + d.source.x + ',' + d.source.y + 'L' + d.target.x + ',' + d.target.y;
-}
-
-function transform(d) {
-  return 'translate(' + d.x + ',' + d.y + ')';
+  genes.attr('d', function(d) {
+    return 'M' + d.source.x + ',' + d.source.y + 'L' + d.target.x + ',' + d.target.y;
+  });
 }
 </script>
 
