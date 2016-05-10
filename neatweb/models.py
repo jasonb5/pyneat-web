@@ -24,7 +24,7 @@ class Population(models.Model):
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
     def generations(self):
-        return Generation.objects.filter(population=self.pk)
+        return Generation.objects.filter(population=self.pk).order_by('rel_index')
 
     def winners(self):
         return Organism.objects.filter(population=self.pk, winner=True)
@@ -53,7 +53,7 @@ class Generation(models.Model):
     population = models.ForeignKey(Population, on_delete=models.CASCADE)
 
     def species(self):
-        return Species.objects.filter(generation=self.pk)
+        return Species.objects.filter(generation=self.pk).order_by('rel_index')
 
     def organism_fitness(self):
         return Organism.objects.filter(
@@ -81,7 +81,7 @@ class Species(models.Model):
     generation = models.ForeignKey(Generation, on_delete=models.CASCADE)
 
     def organisms(self):
-        return Organism.objects.filter(species=self.pk)
+        return Organism.objects.filter(species=self.pk).order_by('rel_index')
 
     def organism_fitness(self):
         return Organism.objects.filter(
