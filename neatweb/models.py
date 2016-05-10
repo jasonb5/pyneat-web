@@ -33,19 +33,19 @@ class Population(models.Model):
         return Organism.objects.filter(
                 population=self.pk).values(
                         'generation__rel_index').annotate(
-                                sfitness=ExpressionWrapper(
+                                ydata=ExpressionWrapper(
                                     Sum('fitness')/Count('generation__rel_index'),
                                     output_field=FloatField()),
-                                grel_index=F('generation__rel_index'))
+                                xdata=F('generation__rel_index'))
 
     def species_fitness(self):
         return Organism.objects.filter(
                 population=self.pk).values(
                         'species__rel_index').annotate(
-                                sfitness=ExpressionWrapper(
+                                ydata=ExpressionWrapper(
                                     Sum('fitness')/Count('species__rel_index'),
                                     output_field=FloatField()),
-                                srel_index=F('species__rel_index'))
+                                xdata=F('species__rel_index'))
                                     
 
 class Generation(models.Model):
@@ -58,17 +58,19 @@ class Generation(models.Model):
     def organism_fitness(self):
         return Organism.objects.filter(
                 generation=self.pk).values(
-                        'rel_index', 'fitness')
+                        'rel_index', 'fitness').annotate(
+                                xdata=F('rel_index'),
+                                ydata=F('fitness'))
 
     def species_fitness(self):
         return Organism.objects.select_related(
                 'species').filter(
                         generation=self.pk).values(
                             'species').annotate(
-                                    sfitness=ExpressionWrapper(
+                                    ydata=ExpressionWrapper(
                                         Sum('fitness')/Count('species'),
                                         output_field=FloatField()),
-                                    srel_index=F('species__rel_index'))
+                                    xdata=F('species__rel_index'))
 
 class Species(models.Model):
     rel_index = models.IntegerField()
@@ -85,14 +87,19 @@ class Species(models.Model):
 
     def organism_fitness(self):
         return Organism.objects.filter(
-                species=self.pk).values('rel_index', 'fitness')
+                species=self.pk).values(
+                        'rel_index', 'fitness').annotate(
+                                xdata=F('rel_index'),
+                                ydata=F('fitness'))
 
     def generation_fitness(self):
         return Species.objects.select_related(
                 'generation').filter(
                         population=self.population,
                         rel_index=self.rel_index).values(
-                                'generation__rel_index', 'avg_fitness')
+                                'generation__rel_index', 'avg_fitness').annotate(
+                                        xdata=F('generation__rel_index'),
+                                        ydata=F('avg_fitness'))
 
     def get_concrete_fields(self, exclude=()):
         return dict([(f.name, f.value_from_object(self)) for f in Species._meta.get_fields() 

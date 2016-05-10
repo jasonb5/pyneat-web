@@ -44,6 +44,54 @@ $(document).ready(function () {
     clearInterval(update_status);
   }
 
+  function update_graph(id, type) {
+    $.get('/neat/graphs', { id: id, type: type }, function(data) {
+      var xdata = [];
+      var ydata = [];
+
+      var json = $.parseJSON(data);
+
+      for (var i = 0; i < json.data.length; ++i) {
+        xdata.push(json.data[i].xdata);
+        ydata.push(json.data[i].ydata);
+      }
+
+      var gdata = [
+        {
+          x: xdata,
+          y: ydata,
+          type: json.type,
+        }
+      ];
+
+      var layout = {
+        title: json.title,
+        xaxis: {
+          title: json.xtitle,
+        },
+        yaxis: {
+          title: json.ytitle,
+        },
+      };
+
+      Plotly.newPlot('graph', gdata, layout);
+    });
+  }
+
+  $('#graph-selection').ready(function() {
+    var id = $('li.active a').attr('href').match(/\/([0-9]+)\/$/i)[1];
+    var type = $('#graph-selection option:selected').val();
+
+    update_graph(id, type);
+  });
+
+  $('#graph-selection').change(function() {
+    var id = $('li.active a').attr('href').match(/\/([0-9]+)\/$/i)[1];
+    var type = $('#graph-selection option:selected').val();
+
+    update_graph(id, type);
+  });
+
   $('#test-data').click(function () {
     var data = [];
 

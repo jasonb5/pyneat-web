@@ -14,4 +14,5 @@ urlpatterns = [
 
     url(r'^progress/$', views.query_progress, name='progress'),
     url(r'^simulate/fitness/$', views.query_simualte_fitness_func, name='sim_fitness'),
+    url(r'^graphs/$', views.query_graphs, name='graphs'),
 ]

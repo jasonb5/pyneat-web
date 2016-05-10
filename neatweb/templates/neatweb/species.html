@@ -41,50 +41,16 @@
   </div>
 </div>
 <div class="column-group">
-  <div class="all-50 medium-100">
-    <div id="org-graph"></div>
+  <div class="all-100">
+    <select id="graph-selection">
+    {% for g in graphs %}
+      <option value="{{ g.type }}">{{ g.name }}</option>
+    {% endfor %}
+    </select>
   </div>
-  <div class="all-50 medium-100">
-    <div id="gen-graph"></div>
+  <div class="all-100">
+    <div id="graph"></div>
   </div>
 </div>
-
-<script type="text/javascript">
-  var xdata = [];
-  var ydata = [];
-
-{% for org in org_fitness %}
-  xdata.push({{ org.rel_index }});
-  ydata.push({{ org.fitness }});
-{% endfor %}
-
-  var data = [
-    {
-      x: xdata,
-      y: ydata,
-      type: 'bar',
-    }
-  ];
-
-  Plotly.newPlot('org-graph', data);
-
-  var xdata = [];
-  var ydata = [];
-
-{% for gen in gen_fitness %}
-  xdata.push({{ gen.generation__rel_index }});
-  ydata.push({{ gen.avg_fitness }});
-{% endfor %}
-
-  var data = [
-    {
-      x: xdata,
-      y: ydata,
-      type: 'bar',
-    }
-  ];
-
-  Plotly.newPlot('gen-graph', data);
-</script>
 
 {% endblock %}
