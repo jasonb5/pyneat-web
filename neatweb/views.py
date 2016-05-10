@@ -182,6 +182,16 @@ def submission(request):
 
         form = ExperimentForm(initial)
 
+    fieldsets = create_fieldsets(form) 
+
+    context = {
+            'form': form,
+            'fieldsets': fieldsets,
+    }
+
+    return render(request, 'neatweb/submission.html', context)
+
+def create_fieldsets(form):
     fieldsets = (
         FieldSet(form, ('name',), 'General'),
         FieldSet(form, (
@@ -208,12 +218,7 @@ def submission(request):
             'clamp_weights'), 'Mutation Parameters')
     )
 
-    context = {
-            'form': form,
-            'fieldsets': fieldsets,
-    }
-
-    return render(request, 'neatweb/submission.html', context)
+    return fieldsets
 
 def organism(request, org_pk):
     org = get_object_or_404(models.Organism, pk=org_pk)
@@ -305,10 +310,38 @@ def population(request, pop_pk):
 def experiment(request, exp_pk):
     exp = get_object_or_404(models.Experiment, pk=exp_pk)
 
+    if request.method == 'POST':
+        form = ExperimentForm(request.POST)
+
+        if form.is_valid():
+            conf = Conf()
+
+            for k, v in form.cleaned_data.items():
+                if isinstance(v, decimal.Decimal):
+                    conf.__dict__[k] = float(v)
+                else:
+                    conf.__dict__[k] = v
+
+            q = Queue(connection=Redis(host='redis', port=6379))
+
+            q.enqueue(pyneat_wrapper, conf)
+
+    config = json.loads(exp.config)
+
+    conf = Conf(**config)
+    initial = {}
+
+    for k, v in conf.__dict__.items():
+        initial[k] = v 
+
+    form = ExperimentForm(initial)
+
     context = {
             'exp': exp,
             'exp_config': json.loads(exp.config),
             'pop_list': exp.populations(),
+            'form': form,
+            'fieldsets': create_fieldsets(form),
     }
 
     return render(request, 'neatweb/experiment.html', context)

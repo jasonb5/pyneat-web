@@ -18,15 +18,13 @@
       </select>
       <input type="submit" value="Select" />
     </form>
-
-    <table class="ink-table bordered">
-    {% for key, value in exp_config.items %}
-      <tr>
-        <td>{{ key }}</td>
-        <td>{{ value|linebreaks }}</td>
-      </tr>
-    {% endfor %}
-    </table>
+  </div>
+  <div class="all-100">
+    <form class="ink-form" action="{% url 'experiment' exp.pk %}" method="post">
+      {% csrf_token %}
+      {% include "neatweb/form.html" %}
+      <input type="submit" value="Re-Submit">
+    </form>
   </div>
 </div>
 
