@@ -27,7 +27,10 @@ class Population(models.Model):
         return Generation.objects.filter(population=self.pk).order_by('rel_index')
 
     def winners(self):
-        return Organism.objects.filter(population=self.pk, winner=True)
+        return Organism.objects.filter(
+                population=self.pk, winner=True).select_related(
+                        'generation',
+                        'species')
 
     def generation_fitness(self):
         return Organism.objects.filter(
@@ -54,6 +57,11 @@ class Generation(models.Model):
 
     def species(self):
         return Species.objects.filter(generation=self.pk).order_by('rel_index')
+
+    def winners(self):
+        return Organism.objects.filter(
+                generation=self.pk, winner=True).select_related(
+                        'species')
 
     def organism_fitness(self):
         return Organism.objects.filter(
@@ -84,6 +92,12 @@ class Species(models.Model):
 
     def organisms(self):
         return Organism.objects.filter(species=self.pk).order_by('rel_index')
+
+    def winners(self):
+        return Organism.objects.filter(
+                species=self.pk, winner=True).select_related(
+                        'generation',
+                        'species')
 
     def organism_fitness(self):
         return Organism.objects.filter(

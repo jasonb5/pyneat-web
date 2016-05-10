@@ -10,8 +10,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="column-group">
-  <div class="all-100">
+<div class="column-group top-space">
+  <div class="all-50">
     <form id="generation-form" action="" method="post">
       {% csrf_token %}
       <select id="generation-sel">
@@ -21,15 +21,17 @@
       </select>
       <input type="submit" value="Select" />
     </form>
-
-    {% if pop.winners %}
-      A winner was found.
-    {% else %}
-      No winner was found.
-    {% endif %}
+  </div>
+  <div class="all-50">
+  {% if pop.winners %}
+    <strong>A Winner was found!</strong>
+    {% include 'neatweb/winner.html' with winner=pop.winners.0 only %}
+  {% else %}
+    No winner was found.
+  {% endif %}
   </div>
 </div>
-<div class="column-group">
+<div class="column-group top-space">
   <div class="all-100">
     <select id="graph-selection">
     {% for g in graphs %}

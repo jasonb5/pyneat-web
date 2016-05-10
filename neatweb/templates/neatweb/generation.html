@@ -15,8 +15,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="column-group">
-  <div class="all-100">
+<div class="column-group top-space">
+  <div class="all-50">
     <form id="species-form" action="" method="post">
       {% csrf_token %}
       <select id="species-sel">
@@ -27,8 +27,16 @@
       <input type="submit" value="Select" />
     </form>
   </div>
+  <div class="all-50">
+  {% if gen.winners %}
+    <strong>A winner was found</strong>
+    {% include 'neatweb/winner.html' with winner=gen.winners.0 only %}
+  {% else %}
+    No Winner was found.
+  {% endif %}
+  </div>
 </div>
-<div class="column-group">
+<div class="column-group top-space">
   <div class="all-100">
     <select id="graph-selection">
     {% for g in graphs %}

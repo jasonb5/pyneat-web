@@ -19,7 +19,7 @@
 
 {% block content %}
 <div class="column-group">
-  <div class="all-100">
+  <div class="all-50">
     <form id="organism-form" action="" method="post">
       {% csrf_token %}
       <select id="organism-sel">
@@ -38,6 +38,14 @@
       </tr>
     {% endfor %}
     </table>
+  </div>
+  <div class="all-50">
+  {% if spec.winners %}
+    <strong>A winner was found.</strong>
+    {% include 'neatweb/winner.html' with winner=spec.winners.0 only %}
+  {% else %}
+    No winners were found.
+  {% endif %}
   </div>
 </div>
 <div class="column-group">
