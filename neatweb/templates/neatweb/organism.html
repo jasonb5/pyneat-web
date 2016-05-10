@@ -23,6 +23,9 @@
 {% block content %}
 <div class="column-group gutters">
   <div class="all-25">
+    <form action='{% url 'network' org.pk %}' method="get">
+      <input type="submit" value="Download" class="ink-button" />
+    </form>
     <table id="org-table" class="ink-table bordered">
     {% for k, v in fields.items %}
       <tr>

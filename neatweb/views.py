@@ -20,6 +20,15 @@ import math
 import decimal
 import datetime
 
+def query_network(request, org_pk):
+    org = models.Organism.objects.get(pk=org_pk)
+
+    response = HttpResponse(content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename=network.json'
+    response.write(org.network)
+
+    return response
+
 def avg_fitness_by_gen(pop_id):
     population = models.Population.objects.get(pk=pop_id)
 
