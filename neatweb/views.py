@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
@@ -307,6 +308,13 @@ def population(request, pop_pk):
 
     return render(request, 'neatweb/population.html', context)
 
+def experiment_delete(request, exp_pk):
+    exp = get_object_or_404(models.Experiment, pk=exp_pk)
+
+    exp.delete()
+
+    return redirect('home')
+
 def experiment(request, exp_pk):
     exp = get_object_or_404(models.Experiment, pk=exp_pk)
 
@@ -325,16 +333,16 @@ def experiment(request, exp_pk):
             q = Queue(connection=Redis(host='redis', port=6379))
 
             q.enqueue(pyneat_wrapper, conf)
+    else:
+        config = json.loads(exp.config)
 
-    config = json.loads(exp.config)
+        conf = Conf(**config)
+        initial = {}
 
-    conf = Conf(**config)
-    initial = {}
+        for k, v in conf.__dict__.items():
+            initial[k] = v 
 
-    for k, v in conf.__dict__.items():
-        initial[k] = v 
-
-    form = ExperimentForm(initial)
+        form = ExperimentForm(initial)
 
     context = {
             'exp': exp,

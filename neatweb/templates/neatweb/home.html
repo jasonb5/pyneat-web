@@ -11,6 +11,7 @@
         <th>Start</th>
         <th>End</th>
         <th/>
+        <th/>
       </tr>
       {% for exp in exp_list %}
         <tr>
@@ -18,10 +19,17 @@
           <td>{{ exp.start|date:"F d, Y, h:i A" }}</td>
           <td id="{{ exp.jid }}">{{ exp.end|date:"F d, Y, h:i A" }}</td>
           <td>
-            <form action="{% url 'experiment' exp.pk %}" method="post">
+            <form action="{% url 'experiment' exp.pk %}" method="get">
               {% csrf_token %}
               <input type="submit" value="Select" />
             </form>
+          </td>
+          <td>
+            <form action="{% url 'experiment-delete' exp.pk %}" method="post">
+              {% csrf_token %}
+              <input type="submit" value="Delete" />
+            </form>
+          </td>
         </tr> 
       {% endfor %}
       </table>
