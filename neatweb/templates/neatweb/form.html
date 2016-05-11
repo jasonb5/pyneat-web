@@ -17,6 +17,9 @@
         <button id="network-modal-trigger" class="ink-button push-right">Test</button>
         {% include 'neatweb/modal.html' with form=form %}
       {% endif %}
+      {% for error in field.errors %}
+        <p class="tip">{{ error }}</p>
+      {% endfor %}
       </div>
     {% endfor %}
     </div>
