@@ -106,6 +106,7 @@ var neurons = svg.selectAll('g')
 neurons.append('circle')
     .attr('r', 8)
     .attr('fill', function(d) { return fill(d.group); })
+    .attr('fixed', true)
     .call(force.drag);
 
 neurons.append('text')
